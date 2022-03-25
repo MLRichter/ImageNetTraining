@@ -31,6 +31,7 @@ from utils import NativeScalerWithGradNormCount as NativeScaler
 import utils
 import models.convnext
 import models.convnext_isotropic
+import models.resnet
 
 def str2bool(v):
     """
