@@ -32,6 +32,7 @@ import utils
 import models.convnext
 import models.convnext_isotropic
 import models.resnet
+import models.efficientnet
 
 def str2bool(v):
     """
