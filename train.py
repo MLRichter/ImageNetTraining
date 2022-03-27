@@ -603,8 +603,8 @@ def main():
             train_loss_fn = LabelSmoothingCrossEntropy(smoothing=args.smoothing)
     else:
         train_loss_fn = nn.CrossEntropyLoss()
-    train_loss_fn = train_loss_fn.device(args.device)
-    validate_loss_fn = nn.CrossEntropyLoss().device(args.device)
+    train_loss_fn = train_loss_fn.to(args.device)
+    validate_loss_fn = nn.CrossEntropyLoss().to(args.device)
 
     # setup checkpoint saver and eval metric tracking
     eval_metric = args.eval_metric
@@ -698,7 +698,7 @@ def train_one_epoch(
         last_batch = batch_idx == last_idx
         data_time_m.update(time.time() - end)
         if not args.prefetcher:
-            input, target = input.device(args.device), target.device(args.device)
+            input, target = input.to(args.device), target.to(args.device)
             if mixup_fn is not None:
                 input, target = mixup_fn(input, target)
         if args.channels_last:
@@ -795,8 +795,8 @@ def validate(model, loader, loss_fn, args, amp_autocast=suppress, log_suffix='')
         for batch_idx, (input, target) in enumerate(loader):
             last_batch = batch_idx == last_idx
             if not args.prefetcher:
-                input = input.device(args.device)
-                target = target.device(args.device)
+                input = input.to(args.device)
+                target = target.to(args.device)
             if args.channels_last:
                 input = input.contiguous(memory_format=torch.channels_last)
 
