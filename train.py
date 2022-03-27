@@ -272,6 +272,8 @@ parser.add_argument('--model-ema-decay', type=float, default=0.9998,
 # Misc
 parser.add_argument('--seed', type=int, default=42, metavar='S',
                     help='random seed (default: 42)')
+parser.add_argument('--device', default='cuda',
+                    help='device to use for training / testing')
 parser.add_argument('--worker-seeding', type=str, default='all',
                     help='worker seed mode (default: all)')
 parser.add_argument('--log-interval', type=int, default=50, metavar='N',
