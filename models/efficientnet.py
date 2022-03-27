@@ -428,6 +428,7 @@ def _efficientnet_b7(pretrained: bool = False, progress: bool = True, **kwargs: 
 def efficientnet_b0(*args, **kwargs):
     model = _efficientnet_b0(**kwargs)
     model.name = "EfficentNetB0"
+    model.num_classes = ...
     return model
 
 @register_model
