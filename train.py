@@ -358,6 +358,7 @@ def main():
                      % (args.rank, args.world_size))
     else:
         _logger.info('Training with a single process on 1 GPUs.')
+        torch.cuda.set_device(args.device)
     assert args.rank >= 0
 
     # resolve AMP arguments based on PyTorch / Apex availability
@@ -419,7 +420,7 @@ def main():
         model = convert_splitbn_model(model, max(num_aug_splits, 2))
 
     # move model to GPU, enable channels last layout if set
-    model.to(args.device)
+    model.cuda()
     if args.channels_last:
         model = model.to(memory_format=torch.channels_last)
 
@@ -603,8 +604,8 @@ def main():
             train_loss_fn = LabelSmoothingCrossEntropy(smoothing=args.smoothing)
     else:
         train_loss_fn = nn.CrossEntropyLoss()
-    train_loss_fn = train_loss_fn.to(args.device)
-    validate_loss_fn = nn.CrossEntropyLoss().to(args.device)
+    train_loss_fn = train_loss_fn.cuda()
+    validate_loss_fn = nn.CrossEntropyLoss().cuda()
 
     # setup checkpoint saver and eval metric tracking
     eval_metric = args.eval_metric
@@ -698,7 +699,7 @@ def train_one_epoch(
         last_batch = batch_idx == last_idx
         data_time_m.update(time.time() - end)
         if not args.prefetcher:
-            input, target = input.to(args.device), target.to(args.device)
+            input, target = input.cuda(), target.cuda()
             if mixup_fn is not None:
                 input, target = mixup_fn(input, target)
         if args.channels_last:
@@ -795,8 +796,8 @@ def validate(model, loader, loss_fn, args, amp_autocast=suppress, log_suffix='')
         for batch_idx, (input, target) in enumerate(loader):
             last_batch = batch_idx == last_idx
             if not args.prefetcher:
-                input = input.to(args.device)
-                target = target.to(args.device)
+                input = input.cuda()
+                target = target.cuda()
             if args.channels_last:
                 input = input.contiguous(memory_format=torch.channels_last)
 
