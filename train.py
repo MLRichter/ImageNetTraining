@@ -419,7 +419,7 @@ def main():
         model = convert_splitbn_model(model, max(num_aug_splits, 2))
 
     # move model to GPU, enable channels last layout if set
-    model.cuda()
+    model.device(args.device)
     if args.channels_last:
         model = model.to(memory_format=torch.channels_last)
 
@@ -603,8 +603,8 @@ def main():
             train_loss_fn = LabelSmoothingCrossEntropy(smoothing=args.smoothing)
     else:
         train_loss_fn = nn.CrossEntropyLoss()
-    train_loss_fn = train_loss_fn.cuda()
-    validate_loss_fn = nn.CrossEntropyLoss().cuda()
+    train_loss_fn = train_loss_fn.device(args.device)
+    validate_loss_fn = nn.CrossEntropyLoss().device(args.device)
 
     # setup checkpoint saver and eval metric tracking
     eval_metric = args.eval_metric
@@ -698,7 +698,7 @@ def train_one_epoch(
         last_batch = batch_idx == last_idx
         data_time_m.update(time.time() - end)
         if not args.prefetcher:
-            input, target = input.cuda(), target.cuda()
+            input, target = input.device(args.device), target.device(args.device)
             if mixup_fn is not None:
                 input, target = mixup_fn(input, target)
         if args.channels_last:
@@ -795,8 +795,8 @@ def validate(model, loader, loss_fn, args, amp_autocast=suppress, log_suffix='')
         for batch_idx, (input, target) in enumerate(loader):
             last_batch = batch_idx == last_idx
             if not args.prefetcher:
-                input = input.cuda()
-                target = target.cuda()
+                input = input.device(args.device)
+                target = target.device(args.device)
             if args.channels_last:
                 input = input.contiguous(memory_format=torch.channels_last)
 
