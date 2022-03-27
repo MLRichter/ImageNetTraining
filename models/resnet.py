@@ -312,7 +312,8 @@ def resnet18(pretrained: bool = False, progress: bool = True, **kwargs: Any) -> 
         progress (bool): If True, displays a progress bar of the download to stderr
     """
     model = _resnet("resnet18", BasicBlock, [2, 2, 2, 2], pretrained, progress, **kwargs)
-    model.num_classes = kwargs["num_classes"]
+    print(kwargs)
+    model.num_classes = ...
     return model
 
 @register_model
