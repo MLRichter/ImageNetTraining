@@ -517,7 +517,9 @@ def efficientnet_b0_perf4(*args, **kwargs):
         bneck_conf(6, 5, 2, 240, 320, 1),
         #bneck_conf(6, 3, 1, 192, 320, 1),
     ]
-    model = _efficientnet("efficientnet_b0", width_mult=1.0, depth_mult=1.0, dropout=0.2,
+    if "pretrained" in kwargs:
+        kwargs.pop("pretrained")
+    model = _efficientnet("efficientnet_b0", width_mult=1.0, depth_mult=1.0, dropout=0.2, pretrained=False,
                           progress=True, inverted_residual_setting=inverted_residual_setting,
                           **kwargs)
     model.name = "EfficentNetB0_Performance4"
