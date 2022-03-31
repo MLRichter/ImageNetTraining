@@ -310,7 +310,7 @@ def _efficientnet_b0(pretrained: bool = False, progress: bool = True, **kwargs: 
         pretrained (bool): If True, returns a model pre-trained on ImageNet
         progress (bool): If True, displays a progress bar of the download to stderr
     """
-    return _efficientnet("efficientnet_b0", 1.0, 1.0, 0.2, progress=progress, **kwargs)
+    return _efficientnet("efficientnet_b0", 1.0, 1.0, 0.2, pretrained, progress=progress, **kwargs)
 
 
 @register_model
@@ -517,7 +517,7 @@ def efficientnet_b0_perf4(*args, **kwargs):
         bneck_conf(6, 5, 2, 240, 320, 1),
         #bneck_conf(6, 3, 1, 192, 320, 1),
     ]
-    model = _efficientnet("efficientnet_b0", width_mult=1.0, depth_mult=1.0, dropout=0.2, pretrained=False,
+    model = _efficientnet("efficientnet_b0", width_mult=1.0, depth_mult=1.0, dropout=0.2,
                           progress=True, inverted_residual_setting=inverted_residual_setting,
                           **kwargs)
     model.name = "EfficentNetB0_Performance4"
