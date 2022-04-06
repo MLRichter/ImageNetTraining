@@ -191,6 +191,7 @@ class EfficientNet(nn.Module):
         """
         super().__init__()
         #_log_api_usage_once(self)
+        self.default_config = {}
 
         if not inverted_residual_setting:
             raise ValueError("The inverted_residual_setting should not be empty")
