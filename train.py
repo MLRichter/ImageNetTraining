@@ -313,6 +313,7 @@ parser.add_argument('--log-wandb', action='store_true', default=False,
                     help='log training and validation metrics to wandb')
 
 
+
 def _parse_args():
     # Do we have a config file to parse?
     args_config, remaining = config_parser.parse_known_args()
@@ -336,7 +337,7 @@ def main():
 
     if args.log_wandb:
         if has_wandb:
-            wandb.init(project=args.experiment, config=args, resume=args.resume)
+            wandb.init(project=args.experiment, config=args, resume=args.resume != "")
         else:
             _logger.warning("You've requested to log metrics to wandb but package not found. "
                             "Metrics not being logged to wandb, try `pip install wandb`")
