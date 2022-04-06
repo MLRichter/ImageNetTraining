@@ -7,7 +7,7 @@ from typing import Any, Callable, Optional, List, Sequence
 
 import torch
 from torch import nn, Tensor
-from torchvision.ops import StochasticDepth
+from models.stochastic_depth import StochasticDepth
 
 from torchvision._internally_replaced_utils import load_state_dict_from_url
 from torchvision.ops.misc import ConvNormActivation, SqueezeExcitation
