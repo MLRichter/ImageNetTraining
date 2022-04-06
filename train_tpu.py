@@ -26,8 +26,8 @@ from typing import Tuple
 
 import torch
 import torch.nn as nn
-import torchvision.utils
-import models.efficientnet
+#import torchvision.utils
+#import models.efficientnet
 
 from bits import initialize_device, setup_model_and_optimizer, DeviceEnv, Monitor, Tracker,\
     TrainState, TrainServices, TrainCfg, CheckpointManager, AccuracyTopK, AvgTensor, distribute_bn
