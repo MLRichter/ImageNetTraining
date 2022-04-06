@@ -1,5 +1,4 @@
 from timm.models import register_model
-from torchvision.models.efficientnet import efficientnet_b0 as eff_b0
 
 import copy
 import math
