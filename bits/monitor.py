@@ -121,7 +121,7 @@ class Monitor:
             output_dir=None,
             logger=None,
             hparams=None,
-            log_wandb=False,
+            log_wandb=True,
             output_enabled=True,
     ):
         self.output_dir = output_dir  # for tensorboard, csv, text file (TODO) logging
