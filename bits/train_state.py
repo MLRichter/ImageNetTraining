@@ -3,7 +3,7 @@ from typing import Dict, Any
 
 from torch import nn as nn
 
-from timm.scheduler import Scheduler
+from scheduler import Scheduler
 from timm.utils import get_state_dict, unwrap_model
 
 from .train_cfg import TrainCfg
