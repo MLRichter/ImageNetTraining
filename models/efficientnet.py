@@ -12,7 +12,7 @@ from models.stochastic_depth import StochasticDepth
 def load_state_dict_from_url(*args, **kwargs):
     return None
 
-from misc import ConvNormActivation, SqueezeExcitation
+from models.misc import ConvNormActivation, SqueezeExcitation
 #from torchvision.utils import _log_api_usage_once
 from torchvision.models._utils import _make_divisible
 
