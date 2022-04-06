@@ -113,7 +113,7 @@ parser.add_argument('--opt-betas', default=None, type=float, nargs='+', metavar=
                     help='Optimizer Betas (default: None, use opt default)')
 parser.add_argument('--momentum', type=float, default=0.9, metavar='M',
                     help='Optimizer momentum (default: 0.9)')
-parser.add_argument('--weight-decay', type=float, default=0.0001,
+parser.add_argument('--weight-decay', type=float, default=0.00002,
                     help='weight decay (default: 0.0001)')
 parser.add_argument('--clip-grad', type=float, default=None, metavar='NORM',
                     help='Clip gradient norm (default: None, no clipping)')
@@ -159,7 +159,7 @@ parser.add_argument('--start-epoch', default=None, type=int, metavar='N',
                     help='manual epoch number (useful on restarts)')
 parser.add_argument('--decay-epochs', type=float, default=100, metavar='N',
                     help='epoch interval to decay LR')
-parser.add_argument('--warmup-epochs', type=int, default=5, metavar='N',
+parser.add_argument('--warmup-epochs', type=int, default=3, metavar='N',
                     help='epochs to warmup LR, if scheduler supports')
 parser.add_argument('--cooldown-epochs', type=int, default=10, metavar='N',
                     help='epochs to cooldown LR at min_lr, after cyclic schedule ends')
@@ -260,7 +260,7 @@ parser.add_argument('--save-images', action='store_true', default=False,
 parser.add_argument('--amp', action='store_true', default=False,
                     help='use NVIDIA Apex AMP or Native AMP for mixed precision training')
 
-parser.add_argument('--pin-mem', action='store_true', default=False,
+parser.add_argument('--pin-mem', action='store_true', default=True,
                     help='Pin CPU memory in DataLoader for more efficient (sometimes) transfer to GPU.')
 parser.add_argument('--output', default='', type=str, metavar='PATH',
                     help='path to output folder (default: none, current dir)')
