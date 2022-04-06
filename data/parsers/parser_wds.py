@@ -25,7 +25,7 @@ except ImportError:
     expand_urls = None
 
 from .parser import Parser
-from timm.bits import get_global_device, is_global_device
+from bits import get_global_device, is_global_device
 
 _logger = logging.getLogger(__name__)
 
