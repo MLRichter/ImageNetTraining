@@ -30,8 +30,6 @@ def _make_divisible(v: float, divisor: int, min_value: Optional[int] = None) -> 
     return new_v
 
 from models.misc import ConvNormActivation, SqueezeExcitation
-#from torchvision.utils import _log_api_usage_once
-from torchvision.models._utils import _make_divisible
 
 model_urls = {
     # Weights ported from https://github.com/rwightman/pytorch-image-models/
