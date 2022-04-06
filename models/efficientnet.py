@@ -9,7 +9,9 @@ import torch
 from torch import nn, Tensor
 from models.stochastic_depth import StochasticDepth
 
-from torchvision._internally_replaced_utils import load_state_dict_from_url
+def load_state_dict_from_url(*args, **kwargs):
+    return None
+
 from torchvision.ops.misc import ConvNormActivation, SqueezeExcitation
 #from torchvision.utils import _log_api_usage_once
 from torchvision.models._utils import _make_divisible
