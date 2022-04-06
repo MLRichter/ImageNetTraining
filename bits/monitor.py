@@ -140,6 +140,7 @@ class Monitor:
         # Setup W&B
         self.wandb_run = None
         if log_wandb:
+            print("LOGGING WANDB")
             if HAS_WANDB:
                 self.wandb_run = wandb.init(project=experiment_name, config=hparams)
             else:
