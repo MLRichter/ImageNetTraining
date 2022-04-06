@@ -356,7 +356,10 @@ def main():
             output_dir=output_dir,
             logger=_logger,
             hparams=vars(args),
-            output_enabled=dev_env.primary),
+            output_enabled=dev_env.primary,
+            experiment_name=args.experiment,
+
+        ),
         checkpoint=checkpoint_manager,
     )
 
