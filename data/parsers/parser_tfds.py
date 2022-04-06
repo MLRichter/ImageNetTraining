@@ -31,7 +31,7 @@ except ImportError as e:
     exit(1)
 from .parser import Parser
 
-from timm.bits import get_global_device, is_global_device
+from bits import get_global_device, is_global_device
 
 MAX_TP_SIZE = 8  # maximum TF threadpool size, only doing jpeg decodes and queuing activities
 SHUFFLE_SIZE = 8192  # number of samples to shuffle in DS queue
