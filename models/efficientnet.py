@@ -584,6 +584,7 @@ def efficientnet_b0_perf5(*args, **kwargs):
     return model
 
 
+@register_model
 def efficientnet_b0_perf42(*args, **kwargs):
     bneck_conf = partial(MBConvConfig, width_mult=1.0, depth_mult=1.0)
     inverted_residual_setting = [
