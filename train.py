@@ -311,6 +311,8 @@ parser.add_argument('--use-multi-epochs-loader', action='store_true', default=Fa
                     help='use the multi-epochs-loader to save time at the beginning of every epoch')
 parser.add_argument('--log-wandb', action='store_true', default=False,
                     help='log training and validation metrics to wandb')
+parser.add_argument('--run-id', action='store_true', type=str, default=None,
+                    help='log training and validation metrics to wandb')
 
 
 
@@ -337,7 +339,7 @@ def main():
 
     if args.log_wandb:
         if has_wandb:
-            wandb.init(project=args.experiment, config=args, resume=args.resume != "")
+            wandb.init(project=args.experiment, config=args, resume="must" if args.resume != "" else None, id=args.run_id)
         else:
             _logger.warning("You've requested to log metrics to wandb but package not found. "
                             "Metrics not being logged to wandb, try `pip install wandb`")
