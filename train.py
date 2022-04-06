@@ -311,7 +311,7 @@ parser.add_argument('--use-multi-epochs-loader', action='store_true', default=Fa
                     help='use the multi-epochs-loader to save time at the beginning of every epoch')
 parser.add_argument('--log-wandb', action='store_true', default=False,
                     help='log training and validation metrics to wandb')
-parser.add_argument('--run-id', action='store_true', type=str, default=None,
+parser.add_argument('--run-id', type=str, default=None,
                     help='log training and validation metrics to wandb')
 
 
