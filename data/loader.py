@@ -11,7 +11,7 @@ from typing import Optional, Callable
 import numpy as np
 import torch.utils.data
 
-from timm.bits import DeviceEnv
+from bits import DeviceEnv
 from .collate import fast_collate
 from .config import PreprocessCfg, MixupCfg
 from .distributed_sampler import OrderedDistributedSampler
