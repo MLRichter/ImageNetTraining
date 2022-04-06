@@ -312,7 +312,7 @@ parser.add_argument('--use-multi-epochs-loader', action='store_true', default=Fa
 parser.add_argument('--log-wandb', action='store_true', default=False,
                     help='log training and validation metrics to wandb')
 parser.add_argument('--run-id', type=str, default=None,
-                    help='log training and validation metrics to wandb')
+                    help='run-id of the resumed run')
 
 
 
