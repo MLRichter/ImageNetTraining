@@ -346,7 +346,19 @@ def convert_to_tf_records(
   training_files = [training_files[i] for i in training_shuffle_idx]
   training_synsets = [training_synsets[i] for i in training_shuffle_idx]
 
-#  # Glob all the validation files
+  validation_files = tf.gfile.Glob(
+      os.path.join(raw_data_dir, TRAINING_DIRECTORY, '*', '*.JPEG'))
+
+  # Get training file synset labels from the directory name
+  validation_synsets = [
+      os.path.basename(os.path.dirname(f)) for f in validation_files]
+  validation_synsets = list(map(lambda x: bytes(x, 'utf-8'), validation_synsets))
+
+  validation_shuffle_idx = make_shuffle_idx(len(validation_files))
+  validation_files = [validation_files[i] for i in validation_shuffle_idx]
+  validation_synsets = [validation_synsets[i] for i in validation_shuffle_idx]
+
+  # Glob all the validation files
 #  validation_files = sorted(tf.gfile.Glob(
 #      os.path.join(raw_data_dir, VALIDATION_DIRECTORY, '*.JPEG')))
 
@@ -355,8 +367,8 @@ def convert_to_tf_records(
 #      os.path.join(raw_data_dir, LABELS_FILE), 'rb').read().splitlines()
 
   # Create unique ids for all synsets
-#  labels = {v: k + 1 for k, v in enumerate(
-#      sorted(set(validation_synsets + training_synsets)))}
+  labels = {v: k + 1 for k, v in enumerate(
+  sorted(set(validation_synsets + training_synsets)))}
 
   # Create training data
  # logging.info('Processing the training data.')
