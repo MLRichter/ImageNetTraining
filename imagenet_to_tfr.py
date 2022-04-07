@@ -72,8 +72,8 @@ LABELS_FILE = 'synset_labels.txt'
 TRAINING_SHARDS = 1024
 VALIDATION_SHARDS = 128
 
-TRAINING_DIRECTORY = 'validation'
-VALIDATION_DIRECTORY = 'train'
+TRAINING_DIRECTORY = 'train'
+VALIDATION_DIRECTORY = 'validation'
 
 
 def _check_or_create_dir(directory: str):
@@ -333,6 +333,18 @@ def convert_to_tf_records(
     random.shuffle(order)
     return order
 
+  validation_files = tf.gfile.Glob(
+      os.path.join(raw_data_dir, TRAINING_DIRECTORY, '*', '*.JPEG'))
+
+  # Get training file synset labels from the directory name
+  validation_synsets = [
+      os.path.basename(os.path.dirname(f)) for f in validation_files]
+  validation_synsets = list(map(lambda x: bytes(x, 'utf-8'), validation_synsets))
+
+  validation_shuffle_idx = make_shuffle_idx(len(validation_files))
+  validation_files = [validation_files[i] for i in validation_shuffle_idx]
+  validation_synsets = [validation_synsets[i] for i in validation_shuffle_idx]
+
   # Glob all the training files
   training_files = tf.gfile.Glob(
       os.path.join(raw_data_dir, TRAINING_DIRECTORY, '*', '*.JPEG'))
@@ -345,18 +357,6 @@ def convert_to_tf_records(
   training_shuffle_idx = make_shuffle_idx(len(training_files))
   training_files = [training_files[i] for i in training_shuffle_idx]
   training_synsets = [training_synsets[i] for i in training_shuffle_idx]
-
-  validation_files = tf.gfile.Glob(
-      os.path.join(raw_data_dir, TRAINING_DIRECTORY, '*', '*.JPEG'))
-
-  # Get training file synset labels from the directory name
-  validation_synsets = [
-      os.path.basename(os.path.dirname(f)) for f in validation_files]
-  validation_synsets = list(map(lambda x: bytes(x, 'utf-8'), validation_synsets))
-
-  validation_shuffle_idx = make_shuffle_idx(len(validation_files))
-  validation_files = [validation_files[i] for i in validation_shuffle_idx]
-  validation_synsets = [validation_synsets[i] for i in validation_shuffle_idx]
 
   # Glob all the validation files
 #  validation_files = sorted(tf.gfile.Glob(
@@ -379,10 +379,10 @@ def convert_to_tf_records(
 
   # Create validation data
   logging.info('Processing the validation data.')
-  #validation_records = _process_dataset(
-  #    validation_files, validation_synsets, labels,
-  #    os.path.join(local_scratch_dir, VALIDATION_DIRECTORY),
-  #    VALIDATION_DIRECTORY, VALIDATION_SHARDS)
+  validation_records = _process_dataset(
+      validation_files, validation_synsets, labels,
+      os.path.join(local_scratch_dir, VALIDATION_DIRECTORY),
+      VALIDATION_DIRECTORY, VALIDATION_SHARDS)
   validation_records = []
   return training_records, validation_records
 
