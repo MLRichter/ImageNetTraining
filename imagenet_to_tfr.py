@@ -73,7 +73,7 @@ TRAINING_SHARDS = 1024
 VALIDATION_SHARDS = 128
 
 TRAINING_DIRECTORY = 'train'
-VALIDATION_DIRECTORY = 'validation'
+VALIDATION_DIRECTORY = 'val'
 
 
 def _check_or_create_dir(directory: str):
@@ -340,8 +340,8 @@ def convert_to_tf_records(
   training_files = tf.gfile.Glob(
       os.path.join(raw_data_dir, TRAINING_DIRECTORY, '*', '*.JPEG'))
 
-  logging.info("Extracted Train Files")
-  logging.info(training_files)
+  #logging.info("Extracted Train Files")
+  #logging.info(training_files)
   logging.info("Extracted Validation Files")
   logging.info(validation_files)
 
