@@ -372,6 +372,11 @@ def convert_to_tf_records(
 
   # Create training data
  # logging.info('Processing the training data.')
+
+  validation_records = _process_dataset(
+      validation_files, validation_synsets, labels,
+      os.path.join(local_scratch_dir, VALIDATION_DIRECTORY),
+      VALIDATION_DIRECTORY, VALIDATION_SHARDS)
   training_records = _process_dataset(
       training_files, training_synsets, labels,
       os.path.join(local_scratch_dir, TRAINING_DIRECTORY),
@@ -379,11 +384,6 @@ def convert_to_tf_records(
 
   # Create validation data
   logging.info('Processing the validation data.')
-  validation_records = _process_dataset(
-      validation_files, validation_synsets, labels,
-      os.path.join(local_scratch_dir, VALIDATION_DIRECTORY),
-      VALIDATION_DIRECTORY, VALIDATION_SHARDS)
-  validation_records = []
   return training_records, validation_records
 
 
