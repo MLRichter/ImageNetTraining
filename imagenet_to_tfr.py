@@ -345,7 +345,7 @@ def convert_to_tf_records(
   validation_files = [validation_files[i] for i in validation_shuffle_idx]
   validation_synsets = [validation_synsets[i] for i in validation_shuffle_idx]
 
-  logging(validation_files)
+  logging.info(validation_files)
 
   # Glob all the training files
   training_files = tf.gfile.Glob(
