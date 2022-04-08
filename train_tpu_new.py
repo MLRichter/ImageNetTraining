@@ -105,7 +105,7 @@ parser.add_argument('--grad-checkpointing', action='store_true', default=False,
                     help='Enable gradient checkpointing through model blocks/stages')
 
 # Optimizer parameters
-parser.add_argument('--opt', default='sgd', type=str, metavar='OPTIMIZER',
+parser.add_argument('--opt', default='rmsproptf', type=str, metavar='OPTIMIZER',
                     help='Optimizer (default: "sgd"')
 parser.add_argument('--opt-eps', default=None, type=float, metavar='EPSILON',
                     help='Optimizer Epsilon (default: None, use opt default)')
@@ -123,9 +123,9 @@ parser.add_argument('--layer-decay', type=float, default=None,
                     help='layer-wise learning rate decay (default: None)')
 
 # Learning rate schedule parameters
-parser.add_argument('--sched', default='cosine', type=str, metavar='SCHEDULER',
+parser.add_argument('--sched', default='step', type=str, metavar='SCHEDULER',
                     help='LR scheduler (default: "cosine"')
-parser.add_argument('--lr', type=float, default=None, metavar='LR',
+parser.add_argument('--lr', type=float, default=0.016, metavar='LR',
                     help='learning rate (default: None => --lr-base')
 parser.add_argument('--lr-base', type=float, default=0.1, metavar='LR',
                     help='base learning rate: lr = lr_base * global_batch_size / base_size')
@@ -149,7 +149,7 @@ parser.add_argument('--lr-k-decay', type=float, default=1.0,
                     help='learning rate k-decay for cosine/poly (default: 1.0)')
 parser.add_argument('--warmup-lr', type=float, default=0.0001, metavar='LR',
                     help='warmup learning rate (default: 0.0001)')
-parser.add_argument('--min-lr', type=float, default=1e-5, metavar='LR',
+parser.add_argument('--min-lr', type=float, default=1e-6, metavar='LR',
                     help='lower lr bound for cyclic schedulers that hit 0 (1e-5)')
 parser.add_argument('--epochs', type=int, default=300, metavar='N',
                     help='number of epochs to train (default: 300)')
@@ -157,7 +157,7 @@ parser.add_argument('--epoch-repeats', type=float, default=0., metavar='N',
                     help='epoch repeat multiplier (number of times to repeat dataset epoch per train epoch).')
 parser.add_argument('--start-epoch', default=None, type=int, metavar='N',
                     help='manual epoch number (useful on restarts)')
-parser.add_argument('--decay-epochs', type=float, default=100, metavar='N',
+parser.add_argument('--decay-epochs', type=float, default=2, metavar='N',
                     help='epoch interval to decay LR')
 parser.add_argument('--warmup-epochs', type=int, default=3, metavar='N',
                     help='epochs to warmup LR, if scheduler supports')
@@ -165,7 +165,7 @@ parser.add_argument('--cooldown-epochs', type=int, default=10, metavar='N',
                     help='epochs to cooldown LR at min_lr, after cyclic schedule ends')
 parser.add_argument('--patience-epochs', type=int, default=10, metavar='N',
                     help='patience epochs for Plateau LR scheduler (default: 10')
-parser.add_argument('--decay-rate', '--dr', type=float, default=0.1, metavar='RATE',
+parser.add_argument('--decay-rate', '--dr', type=float, default=0.98, metavar='RATE',
                     help='LR decay rate (default: 0.1)')
 
 # Augmentation & regularization parameters
@@ -179,7 +179,7 @@ parser.add_argument('--hflip', type=float, default=0.5,
                     help='Horizontal flip training aug probability')
 parser.add_argument('--vflip', type=float, default=0.,
                     help='Vertical flip training aug probability')
-parser.add_argument('--color-jitter', type=float, default=None, metavar='PCT',
+parser.add_argument('--color-jitter', type=float, default=0.4, metavar='PCT',
                     help='Color jitter factor (default: 0.4)')
 parser.add_argument('--aa', type=str, default="original", metavar='NAME',
                     help='Use AutoAugment policy. "v0" or "original". (default: None)'),
