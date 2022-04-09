@@ -460,6 +460,8 @@ def efficientnet_b0_eff(*args, **kwargs):
         bneck_conf(6, 5, 2, 112, 192, 1),
         #bneck_conf(6, 3, 1, 192, 320, 1),
     ]
+    if "pretrained" in kwargs:
+        kwargs.pop("pretrained")
     model = _efficientnet("efficientnet_b0", width_mult=1.0, depth_mult=1.0, dropout=0.2, pretrained=False,
                           progress=True, inverted_residual_setting=inverted_residual_setting,
                           **kwargs)
@@ -479,6 +481,8 @@ def efficientnet_b0_perf(*args, **kwargs):
         bneck_conf(6, 5, 2, 112, 192, 1),
         #bneck_conf(6, 3, 1, 192, 320, 1),
     ]
+    if "pretrained" in kwargs:
+        kwargs.pop("pretrained")
     model = _efficientnet("efficientnet_b0", width_mult=1.0, depth_mult=1.0, dropout=0.2, pretrained=False,
                           progress=True, inverted_residual_setting=inverted_residual_setting,
                           **kwargs)
@@ -498,6 +502,8 @@ def efficientnet_b0_perf2(*args, **kwargs):
         bneck_conf(6, 5, 2, 112, 192, 1),
         #bneck_conf(6, 3, 1, 192, 320, 1),
     ]
+    if "pretrained" in kwargs:
+        kwargs.pop("pretrained")
     model = _efficientnet("efficientnet_b0", width_mult=1.0, depth_mult=1.0, dropout=0.2, pretrained=False,
                           progress=True, inverted_residual_setting=inverted_residual_setting,
                           **kwargs)
@@ -618,6 +624,8 @@ def efficientnet_b0_perf6(pretrained: bool = False, progress: bool = True, **kwa
         pretrained (bool): If True, returns a model pre-trained on ImageNet
         progress (bool): If True, displays a progress bar of the download to stderr
     """
+    if "pretrained" in kwargs:
+        kwargs.pop("pretrained")
     model =  _efficientnet("efficientnet_b0", 1.0, 1.0, 0.2, pretrained, progress, allways_skip=True, **kwargs)
     model.name = "EfficientNetB0_Performance6"
     return model
