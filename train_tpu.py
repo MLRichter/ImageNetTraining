@@ -149,7 +149,7 @@ parser.add_argument('--lr-k-decay', type=float, default=1.0,
                     help='learning rate k-decay for cosine/poly (default: 1.0)')
 parser.add_argument('--warmup-lr', type=float, default=0.0001, metavar='LR',
                     help='warmup learning rate (default: 0.0001)')
-parser.add_argument('--min-lr', type=float, default=1e-5, metavar='LR',
+parser.add_argument('--min-lr', type=float, default=1e-6, metavar='LR',
                     help='lower lr bound for cyclic schedulers that hit 0 (1e-5)')
 parser.add_argument('--epochs', type=int, default=300, metavar='N',
                     help='number of epochs to train (default: 300)')
@@ -179,7 +179,7 @@ parser.add_argument('--hflip', type=float, default=0.5,
                     help='Horizontal flip training aug probability')
 parser.add_argument('--vflip', type=float, default=0.,
                     help='Vertical flip training aug probability')
-parser.add_argument('--color-jitter', type=float, default=None, metavar='PCT',
+parser.add_argument('--color-jitter', type=float, default=0.4, metavar='PCT',
                     help='Color jitter factor (default: 0.4)')
 parser.add_argument('--aa', type=str, default="original", metavar='NAME',
                     help='Use AutoAugment policy. "v0" or "original". (default: None)'),
