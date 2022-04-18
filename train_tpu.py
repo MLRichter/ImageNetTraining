@@ -277,6 +277,8 @@ parser.add_argument('--force-cpu', action='store_true', default=False,
                     help='Force CPU to be used even if HW accelerator exists.')
 parser.add_argument('--log-wandb', action='store_true', default=False,
                     help='log training and validation metrics to wandb')
+parser.add_argument('--update_freq', default=1, type=int,
+                        help='gradient accumulation steps')
 
 
 def _parse_args():
@@ -376,6 +378,7 @@ def main():
                 services=services,
                 loader=loader_train,
                 dev_env=dev_env,
+                update_freq=args.update_freq
             )
 
             if dev_env.distributed and args.dist_bn in ('broadcast', 'reduce'):
@@ -632,6 +635,7 @@ def train_one_epoch(
         services: TrainServices,
         loader,
         dev_env: DeviceEnv,
+        update_freq: int = 1
 ):
     tracker = Tracker()
     loss_meter = AvgTensor()  # FIXME move loss meter into task specific TaskMetric
@@ -648,8 +652,8 @@ def train_one_epoch(
         with dev_env.autocast():
             output = state.model(sample)
             loss = state.train_loss(output, target)
-
-        state.updater.apply(loss)
+        loss /= update_freq
+        state.updater.apply(loss, accumulate=(step_idx+1) % update_freq != 0)
 
         tracker.mark_iter_step_end()
 
