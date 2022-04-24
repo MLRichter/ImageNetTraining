@@ -708,6 +708,8 @@ def efficientnet_b0_perf32(*args, **kwargs):
 
 @register_model
 def efficientnet_b0_perf33(*args, **kwargs):
+    if "pretrained" in kwargs:
+        kwargs.pop("pretrained")
     bneck_conf = partial(MBConvConfig, width_mult=1.0, depth_mult=1.0)
     inverted_residual_setting = [
         bneck_conf(1, 7, 1, 32, 16, 1),
