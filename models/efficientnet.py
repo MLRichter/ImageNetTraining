@@ -57,7 +57,8 @@ class MBConvConfig:
         num_layers: int,
         width_mult: float,
         depth_mult: float,
-        allways_skip: bool = False
+        allways_skip: bool = False,
+        downsample_kernel_size: Optional[int] = None
     ) -> None:
         self.expand_ratio = expand_ratio
         self.kernel = kernel
@@ -66,6 +67,7 @@ class MBConvConfig:
         self.out_channels = self.adjust_channels(out_channels, width_mult)
         self.num_layers = self.adjust_depth(num_layers, depth_mult)
         self.allways_skip = allways_skip
+        self.downsample_kernel_size = downsample_kernel_size
 
     def __repr__(self) -> str:
         s = (
@@ -226,6 +228,9 @@ class EfficientNet(nn.Module):
             for _ in range(cnf.num_layers):
                 # copy to avoid modifications. shallow copy is enough
                 block_cnf = copy.copy(cnf)
+
+                if not stage and cnf.downsample_kernel_size is not None:
+                    block_cnf.kernel = cnf.downsample_kernel_size
 
                 # overwrite info if not the first conv in the stage
                 if stage:
@@ -687,10 +692,10 @@ def efficientnet_b0_perf32(*args, **kwargs):
         bneck_conf(1, 3, 1, 32, 16, 1),
         bneck_conf(6, 3, 2, 16, 24, 2),
         bneck_conf(6, 5, 2, 24, 40, 2),
-        bneck_conf(6, 3, 2, 40, 80, 3),
+        bneck_conf(6, 5, 2, 40, 80, 3, allways_skip=True),
         bneck_conf(6, 5, 1, 80, 112, 3),
-        bneck_conf(6, 5, 2, 112, 192, 4),
-        bneck_conf(6, 3, 1, 192, 320, 1),
+        bneck_conf(6, 5, 2, 112, 192, 4, allways_skip=True),
+        bneck_conf(6, 5, 1, 192, 320, 1),
     ]
     if "pretrained" in kwargs:
         kwargs.pop("pretrained")
@@ -698,6 +703,25 @@ def efficientnet_b0_perf32(*args, **kwargs):
                           progress=True, inverted_residual_setting=inverted_residual_setting,
                           **kwargs)
     model.name = "EfficentNetB0_Performance3"
+    return model
+
+
+@register_model
+def efficientnet_b0_perf33(*args, **kwargs):
+    bneck_conf = partial(MBConvConfig, width_mult=1.0, depth_mult=1.0)
+    inverted_residual_setting = [
+        bneck_conf(1, 7, 1, 32, 16, 1),
+        bneck_conf(6, 7, 2, 16, 24, 2),
+        bneck_conf(6, 5, 2, 24, 40, 2),
+        bneck_conf(6, 3, 2, 40, 80, 3),
+        bneck_conf(6, 5, 1, 80, 117, 3),
+        bneck_conf(6, 3, 2, 117, 195, 4),
+        bneck_conf(6, 3, 1, 195, 320, 1),
+    ]
+    model = _efficientnet("efficientnet_b0", width_mult=1.0, depth_mult=1.0, dropout=0.2, pretrained=False,
+                          progress=True, inverted_residual_setting=inverted_residual_setting,
+                          **kwargs)
+    model.name = "EfficentNetB0_Performance33"
     return model
 
 
@@ -805,7 +829,7 @@ def efficientnet_b0_perf6(pretrained: bool = False, progress: bool = True, **kwa
 if __name__ == '__main__':
     from rfa_toolbox import create_graph_from_pytorch_model, visualize_architecture, input_resolution_range
     from torchvision.models import resnet18
-    model = resnet18()
+    model = efficientnet_b0_perf32()
     graph = create_graph_from_pytorch_model(model, custom_layers=["SqueezeExcitation", "ConvNormActivation"])
     print(input_resolution_range(graph, lower_bound=True))
-    visualize_architecture(graph, "EfficientNet", color_border=False, color_critical=False).view()
+    visualize_architecture(graph, "EfficientNet").view()
