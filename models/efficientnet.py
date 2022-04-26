@@ -691,10 +691,10 @@ def efficientnet_b0_perf32(*args, **kwargs):
     inverted_residual_setting = [
         bneck_conf(1, 3, 1, 32, 16, 1),
         bneck_conf(6, 3, 2, 16, 24, 2),
-        bneck_conf(6, 5, 2, 24, 40, 2),
-        bneck_conf(6, 5, 2, 40, 80, 3, allways_skip=True),
-        bneck_conf(6, 5, 1, 80, 112, 3),
-        bneck_conf(6, 5, 2, 112, 192, 4, allways_skip=True),
+        bneck_conf(6, 3, 2, 24, 40, 2),
+        bneck_conf(6, 5, 2, 40, 80, 3, downsample_kernel_size=3),
+        bneck_conf(6, 3, 1, 80, 112, 3),
+        bneck_conf(6, 5, 2, 112, 192, 4, downsample_kernel_size=3),
         bneck_conf(6, 5, 1, 192, 320, 1),
     ]
     if "pretrained" in kwargs:
@@ -897,4 +897,4 @@ if __name__ == '__main__':
     model = efficientnet_b0_perf32()
     graph = create_graph_from_pytorch_model(model, custom_layers=["SqueezeExcitation", "ConvNormActivation"])
     print(input_resolution_range(graph, lower_bound=True))
-    visualize_architecture(graph, "EfficientNet").view()
+    visualize_architecture(graph, "EfficientNet", input_res=227).view()
