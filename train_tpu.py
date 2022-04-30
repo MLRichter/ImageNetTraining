@@ -26,6 +26,7 @@ from typing import Tuple
 
 import torch
 import torch.nn as nn
+import torch_xla.core.xla_model as xm
 #import torchvision.utils
 import models.efficientnet
 
@@ -670,6 +671,9 @@ def train_one_epoch(
         )
 
         tracker.mark_iter()
+
+        if len(sample) > 1:
+            xm.mark_step()
         # end for
 
     if hasattr(state.updater.optimizer, 'sync_lookahead'):
