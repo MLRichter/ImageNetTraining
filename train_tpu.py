@@ -672,7 +672,7 @@ def train_one_epoch(
 
         tracker.mark_iter()
 
-        if len(sample) > 1:
+        if update_freq > 1 and len(sample) > 1:
             xm.mark_step()
         # end for
 
