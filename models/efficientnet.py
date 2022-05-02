@@ -303,6 +303,8 @@ def _efficientnet(
     allways_skip: bool = False,
     **kwargs: Any,
 ) -> EfficientNet:
+    if "layer_scale_init_value" in kwargs:
+        kwargs.pop("layer_scale_init_value")
     bneck_conf = partial(MBConvConfig, width_mult=width_mult, depth_mult=depth_mult, allways_skip=allways_skip)
     inverted_residual_setting = [
         bneck_conf(1, 3, 1, 32, 16, 1),
