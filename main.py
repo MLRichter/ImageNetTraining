@@ -94,7 +94,7 @@ def get_args_parser():
     parser.add_argument('--layer_decay', type=float, default=1.0)
     parser.add_argument('--min_lr', type=float, default=1e-6, metavar='LR',
                         help='lower lr bound for cyclic schedulers that hit 0 (1e-6)')
-    parser.add_argument('--warmup_epochs', type=int, default=20, metavar='N',
+    parser.add_argument('--warmup_epochs', type=int, default=5, metavar='N',
                         help='epochs to warmup LR, if scheduler supports')
     parser.add_argument('--warmup_steps', type=int, default=-1, metavar='N',
                         help='num of steps to warmup LR, will overload warmup_epochs if set > 0')

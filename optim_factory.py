@@ -7,6 +7,7 @@
 
 
 import torch
+from timm.optim import Lamb
 from torch import optim as optim
 
 from timm.optim.adafactor import Adafactor
@@ -162,6 +163,8 @@ def create_optimizer(args, model, get_num_layer=None, get_layer_scale=None, filt
         if not args.lr:
             opt_args['lr'] = None
         optimizer = Adafactor(parameters, **opt_args)
+    elif opt_lower == 'lamb':
+        optimizer = Lamb(parameters, **opt_args)
     elif opt_lower == 'adahessian':
         optimizer = Adahessian(parameters, **opt_args)
     elif opt_lower == 'rmsprop':
