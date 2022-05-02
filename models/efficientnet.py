@@ -449,6 +449,7 @@ def _efficientnet_b7(pretrained: bool = False, progress: bool = True, **kwargs: 
         **kwargs,
     )
 
+
 @register_model
 def efficientnet_b0(*args, **kwargs):
     model = _efficientnet_b0(**kwargs)
@@ -459,7 +460,7 @@ def efficientnet_b0(*args, **kwargs):
 
 @register_model
 def efficientnet_b1(*args, **kwargs):
-    model = _efficientnet_b0(**kwargs)
+    model = _efficientnet_b1(**kwargs)
     model.name = "EfficentNetB1"
     model.num_classes = ...
     return model
@@ -467,10 +468,36 @@ def efficientnet_b1(*args, **kwargs):
 
 @register_model
 def efficientnet_b2(*args, **kwargs):
-    model = _efficientnet_b0(**kwargs)
+    model = _efficientnet_b2(**kwargs)
     model.name = "EfficentNetB2"
     model.num_classes = ...
     return model
+
+
+@register_model
+def efficientnet_b3(*args, **kwargs):
+    model = _efficientnet_b3(**kwargs)
+    model.name = "EfficentNetB3"
+    model.num_classes = ...
+    return model
+
+
+@register_model
+def efficientnet_b4(*args, **kwargs):
+    model = _efficientnet_b4(**kwargs)
+    model.name = "EfficentNetB4"
+    model.num_classes = ...
+    return model
+
+
+@register_model
+def efficientnet_b5(*args, **kwargs):
+    model = _efficientnet_b5(**kwargs)
+    model.name = "EfficentNetB5"
+    model.num_classes = ...
+    return model
+
+
 
 @register_model
 def efficientnet_b0_eff(*args, **kwargs):
