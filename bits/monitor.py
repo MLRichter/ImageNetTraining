@@ -141,16 +141,17 @@ class Monitor:
 
         # Setup W&B
         self.wandb_run = None
+        self.output_enabled = output_enabled
+
         if log_wandb:
             self.logger.info("LOGGING WANDB")
             if HAS_WANDB:
                 self.wandb_run = wandb.init(project=experiment_name, config=hparams,
-                                            resume="allow" if resume != "" else None, id=wand_experiment_id)
+                                            resume="allow" if resume != "" and self.output_enabled else None, id=wand_experiment_id if self.output_enabled else None)
             else:
                 _logger.warning("You've requested to log metrics to wandb but package not found. "
                                 "Metrics not being logged to wandb, try `pip install wandb`")
 
-        self.output_enabled = output_enabled
         # FIXME image save
 
     def log_step(
