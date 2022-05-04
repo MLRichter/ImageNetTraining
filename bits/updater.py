@@ -40,7 +40,8 @@ class Updater:
         self.optimizer.zero_grad()
 
     def apply(self, loss: torch.Tensor, accumulate=False):
-        loss.backward(create_graph=self.create_graph)
+        #loss.backward(create_graph=self.create_graph)
+        loss.backward()
         if accumulate:
             return
         if self.clip_fn is not None:
