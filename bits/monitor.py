@@ -145,7 +145,7 @@ class Monitor:
             self.logger.info("LOGGING WANDB")
             if HAS_WANDB:
                 self.wandb_run = wandb.init(project=experiment_name, config=hparams,
-                                            resume="must" if resume != "" else None, id=wand_experiment_id)
+                                            resume="allow" if resume != "" else None, id=wand_experiment_id)
             else:
                 _logger.warning("You've requested to log metrics to wandb but package not found. "
                                 "Metrics not being logged to wandb, try `pip install wandb`")
