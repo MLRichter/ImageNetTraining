@@ -348,7 +348,7 @@ def _efficientnet_b1(pretrained: bool = False, progress: bool = True, **kwargs: 
         pretrained (bool): If True, returns a model pre-trained on ImageNet
         progress (bool): If True, displays a progress bar of the download to stderr
     """
-    return _efficientnet("efficientnet_b1", 1.0, 1.1, 0.2, pretrained, progress, **kwargs)
+    return _efficientnet("efficientnet_b1", 1.0, 1.1, 0.2, pretrained, progress=progress, **kwargs)
 
 @register_model
 def _efficientnet_b2(pretrained: bool = False, progress: bool = True, **kwargs: Any) -> EfficientNet:
