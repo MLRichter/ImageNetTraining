@@ -40,9 +40,9 @@ from timm.loss import *
 from timm.optim import optimizer_kwargs
 from timm.scheduler import create_scheduler
 from timm.utils import setup_default_logging, random_seed, get_outdir, unwrap_model
-import os
-WANDB_API_KEY = "5a0c9d2c04e141e969e5f63e2c722fe7737846c2"
-os.environ["WANDB_API_KEY"] = WANDB_API_KEY
+#import os
+#WANDB_API_KEY = "5a0c9d2c04e141e969e5f63e2c722fe7737846c2"
+#os.environ["WANDB_API_KEY"] = WANDB_API_KEY
 
 
 
