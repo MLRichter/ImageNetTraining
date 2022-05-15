@@ -1139,6 +1139,27 @@ def efficientnet_b5_perf42(*args, **kwargs):
 
 
 @register_model
+def efficientnet_b5_perf43(*args, **kwargs):
+    bneck_conf = partial(MBConvConfig, width_mult=1.6, depth_mult=2.2)
+    inverted_residual_setting = [
+        bneck_conf(1, 3, 1, 32, 16, 1),
+        bneck_conf(6, 3, 2, 16, 24, 2),
+        bneck_conf(6, 5, 2, 24, 40, 2),
+        bneck_conf(6, 3, 2, 40, 80, 3),
+        bneck_conf(6, 5, 1, 80, 165, 7),
+        bneck_conf(6, 5, 2, 165, 320, 1),
+        #bneck_conf(6, 3, 1, 192, 320, 1),
+    ]
+    if "pretrained" in kwargs:
+        kwargs.pop("pretrained")
+    model = _efficientnet("efficientnet_b5", width_mult=1.6, depth_mult=2.2, dropout=0.3, pretrained=False,
+                          progress=True, inverted_residual_setting=inverted_residual_setting,
+                          **kwargs)
+    model.name = "EfficentNetB2_Performance43"
+    return model
+
+
+@register_model
 def efficientnet_b6_perf42(*args, **kwargs):
     bneck_conf = partial(MBConvConfig, width_mult=1.8, depth_mult=2.6)
     inverted_residual_setting = [
