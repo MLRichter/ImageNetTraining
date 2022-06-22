@@ -937,9 +937,8 @@ def efficientnet_b5_perf5(*args, **kwargs):
     ]
     if "pretrained" in kwargs:
         kwargs.pop("pretrained")
-    model = _efficientnet("efficientnet_b5", width_mult=1.6, depth_mult=2.2, dropout=0.4, pretrained=False,
+    model = _efficientnet("efficientnet_b5", width_mult=1.6, depth_mult=2.2, dropout=0.3, pretrained=False,
                           progress=True, inverted_residual_setting=inverted_residual_setting,
-                          norm_layer=partial(nn.BatchNorm2d, eps=0.001, momentum=0.01),
                           **kwargs)
     model.name = "EfficentNetB5_Performance5"
     return model
@@ -980,9 +979,8 @@ def efficientnet_b6_perf5(*args, **kwargs):
     ]
     if "pretrained" in kwargs:
         kwargs.pop("pretrained")
-    model = _efficientnet("efficientnet_b5", width_mult=1.8, depth_mult=2.6, dropout=0.5, pretrained=False,
+    model = _efficientnet("efficientnet_b5", width_mult=1.8, depth_mult=2.6, dropout=0.3, pretrained=False,
                           progress=True, inverted_residual_setting=inverted_residual_setting,
-                          norm_layer=partial(nn.BatchNorm2d, eps=0.001, momentum=0.01),
                           **kwargs)
     model.name = "EfficentNetB5_Performance5"
     return model
@@ -1002,9 +1000,8 @@ def efficientnet_b7_perf5(*args, **kwargs):
     ]
     if "pretrained" in kwargs:
         kwargs.pop("pretrained")
-    model = _efficientnet("efficientnet_b7", width_mult=2.0, depth_mult=3.1, dropout=0.5, pretrained=False,
+    model = _efficientnet("efficientnet_b7", width_mult=2.0, depth_mult=3.1, dropout=0.3, pretrained=False,
                           progress=True, inverted_residual_setting=inverted_residual_setting,
-                          norm_layer=partial(nn.BatchNorm2d, eps=0.001, momentum=0.01),
 
                           **kwargs)
     model.name = "EfficentNetB7_Performance5"
@@ -1173,11 +1170,31 @@ def efficientnet_b6_perf42(*args, **kwargs):
     ]
     if "pretrained" in kwargs:
         kwargs.pop("pretrained")
-    model = _efficientnet("efficientnet_b3", width_mult=1.8, depth_mult=2.6, dropout=0.5, pretrained=False,
+    model = _efficientnet("efficientnet_b3", width_mult=1.8, depth_mult=2.6, dropout=0.3, pretrained=False,
                           progress=True, inverted_residual_setting=inverted_residual_setting,
-                          norm_layer=partial(nn.BatchNorm2d, eps=0.001, momentum=0.01),
                           **kwargs)
     model.name = "EfficentNetB2_Performance42"
+    return model
+
+
+@register_model
+def efficientnet_b7(*args, **kwargs):
+    bneck_conf = partial(MBConvConfig, width_mult=2.0, depth_mult=3.1)
+    inverted_residual_setting = [
+        bneck_conf(1, 3, 1, 32, 16, 1),
+        bneck_conf(6, 3, 2, 16, 24, 2),
+        bneck_conf(6, 5, 2, 24, 40, 2),
+        bneck_conf(6, 3, 2, 40, 80, 3),
+        bneck_conf(6, 5, 1, 80, 112, 3),
+        bneck_conf(6, 5, 2, 112, 192, 4),
+        bneck_conf(6, 3, 1, 192, 320, 1),
+    ]
+    if "pretrained" in kwargs:
+        kwargs.pop("pretrained")
+    model = _efficientnet("efficientnet_b3", width_mult=2.0, depth_mult=3.1, dropout=0.3, pretrained=False,
+                          progress=True, inverted_residual_setting=inverted_residual_setting,
+                          **kwargs)
+    model.name = "EfficentNetB7"
     return model
 
 
@@ -1195,10 +1212,8 @@ def efficientnet_b7_perf42(*args, **kwargs):
     ]
     if "pretrained" in kwargs:
         kwargs.pop("pretrained")
-    model = _efficientnet("efficientnet_b3", width_mult=2.0, depth_mult=3.1, dropout=0.5, pretrained=False,
+    model = _efficientnet("efficientnet_b3", width_mult=2.0, depth_mult=3.1, dropout=0.3, pretrained=False,
                           progress=True, inverted_residual_setting=inverted_residual_setting,
-                          norm_layer=partial(nn.BatchNorm2d, eps=0.001, momentum=0.01),
-
                           **kwargs)
     model.name = "EfficentNetB2_Performance42"
     return model
