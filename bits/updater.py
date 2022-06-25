@@ -41,9 +41,10 @@ class Updater:
 
     def apply(self, loss: torch.Tensor, accumulate=False):
         #loss.backward(create_graph=self.create_graph)
-        loss.backward()
         if accumulate:
             return
+        loss.backward()
+
         if self.clip_fn is not None:
             self.clip_fn(self.clip_params_fn(), self.clip_value)
         self.optimizer.step()

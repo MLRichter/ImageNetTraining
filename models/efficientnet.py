@@ -1191,7 +1191,7 @@ def efficientnet_b7(*args, **kwargs):
     ]
     if "pretrained" in kwargs:
         kwargs.pop("pretrained")
-    model = _efficientnet("efficientnet_b3", width_mult=2.0, depth_mult=3.1, dropout=0.3, pretrained=False,
+    model = _efficientnet("efficientnet_b7", width_mult=2.0, depth_mult=3.1, dropout=0.3, pretrained=False,
                           progress=True, inverted_residual_setting=inverted_residual_setting,
                           **kwargs)
     model.name = "EfficentNetB7"
