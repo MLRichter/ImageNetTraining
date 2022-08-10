@@ -3,7 +3,7 @@ from timm.models import register_model
 
 
 class BetterMobileNetV1(nn.Module):
-    def __init__(self, ch_in=3, n_classes=1000, **kwargs):
+    def __init__(self, ch_in=3, n_classes=1000, pretrained=False, **kwargs):
         super(BetterMobileNetV1, self).__init__()
         self.default_cfg = {}
 
@@ -55,7 +55,7 @@ class BetterMobileNetV1(nn.Module):
 
 
 class MobileNetV1(nn.Module):
-    def __init__(self, ch_in=3, n_classes=1000, **kwargs):
+    def __init__(self, ch_in=3, n_classes=1000, pretrained=False, **kwargs):
         super(MobileNetV1, self).__init__()
         self.default_cfg = {}
 
@@ -105,11 +105,11 @@ class MobileNetV1(nn.Module):
         return x
 
     @register_model
-    def mobilenetV1(*, weights=None, progress: bool = True, **kwargs):
+    def mobilenetV1(*args, weights=None, progress: bool = True, **kwargs):
         return MobileNetV1(**kwargs)
 
     @register_model
-    def better_mobilenetV1(*, weights=None, progress: bool = True, **kwargs):
+    def better_mobilenetV1(*args, weights=None, progress: bool = True, **kwargs):
         return BetterMobileNetV1(**kwargs)
 
 if __name__=='__main__':
