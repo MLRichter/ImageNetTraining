@@ -55,6 +55,7 @@ class BetterMobileNetV1(nn.Module):
 
 
 class MobileNetV1(nn.Module):
+
     def __init__(self, ch_in=3, n_classes=1000, pretrained=False, **kwargs):
         super(MobileNetV1, self).__init__()
         self.default_cfg = {}
