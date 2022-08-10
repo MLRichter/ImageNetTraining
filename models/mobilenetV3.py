@@ -2,6 +2,8 @@ import warnings
 import torch
 
 from functools import partial
+
+from timm.models import register_model
 from torch import nn, Tensor
 from typing import Any, Callable, List, Optional, Sequence
 
@@ -275,6 +277,7 @@ def _mobilenet_v3_model(
     return model
 
 
+@register_model
 def mobilenet_v3_large(pretrained: bool = False, progress: bool = True, **kwargs: Any) -> MobileNetV3:
     """
     Constructs a large MobileNetV3 architecture from
@@ -289,6 +292,7 @@ def mobilenet_v3_large(pretrained: bool = False, progress: bool = True, **kwargs
     return _mobilenet_v3_model(arch, inverted_residual_setting, last_channel, pretrained, progress, **kwargs)
 
 
+@register_model
 def mobilenet_v3_small(pretrained: bool = False, progress: bool = True, **kwargs: Any) -> MobileNetV3:
     """
     Constructs a small MobileNetV3 architecture from
@@ -303,6 +307,7 @@ def mobilenet_v3_small(pretrained: bool = False, progress: bool = True, **kwargs
     return _mobilenet_v3_model(arch, inverted_residual_setting, last_channel, pretrained, progress, **kwargs)
 
 
+@register_model
 def better_mobilenet_v3_large(pretrained: bool = False, progress: bool = True, **kwargs: Any) -> MobileNetV3:
     """
     Constructs a large MobileNetV3 architecture from
@@ -317,6 +322,7 @@ def better_mobilenet_v3_large(pretrained: bool = False, progress: bool = True, *
     return _mobilenet_v3_model(arch, inverted_residual_setting, last_channel, pretrained, progress, **kwargs)
 
 
+@register_model
 def better_mobilenet_v3_small(pretrained: bool = False, progress: bool = True, **kwargs: Any) -> MobileNetV3:
     """
     Constructs a small MobileNetV3 architecture from
