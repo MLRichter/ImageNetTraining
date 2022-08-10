@@ -266,7 +266,7 @@ def vgg19(*, weights = None, progress: bool = True, **kwargs: Any) -> VGG:
 
 
 @register_model
-def vgg19_bn(*, weights = None, progress: bool = True, **kwargs: Any) -> VGG:
+def vgg19_bn(*args, **kwargs: Any) -> VGG:
     """VGG-19_BN from `Very Deep Convolutional Networks for Large-Scale Image Recognition <https://arxiv.org/abs/1409.1556>`__.
 
     Args:
@@ -285,11 +285,11 @@ def vgg19_bn(*, weights = None, progress: bool = True, **kwargs: Any) -> VGG:
     .. autoclass:: torchvision.models.VGG19_BN_Weights
         :members:
     """
-    return _vgg("E", True, weights, progress, **kwargs)
+    return _vgg("E", True, None, True, **kwargs)
 
 
 @register_model
-def better_vgg19_bn(*, weights = None, progress: bool = True, **kwargs: Any) -> VGG:
+def better_vgg19_bn(*args, **kwargs: Any) -> VGG:
     """VGG-19_BN from `Very Deep Convolutional Networks for Large-Scale Image Recognition <https://arxiv.org/abs/1409.1556>`__.
 
     Args:
@@ -308,7 +308,7 @@ def better_vgg19_bn(*, weights = None, progress: bool = True, **kwargs: Any) -> 
     .. autoclass:: torchvision.models.VGG19_BN_Weights
         :members:
     """
-    return _vgg("E2", True, weights, progress, **kwargs)
+    return _vgg("E2", True, None, True, **kwargs)
 
 
 
