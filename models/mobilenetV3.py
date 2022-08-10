@@ -7,7 +7,6 @@ from timm.models import register_model
 from torch import nn, Tensor
 from typing import Any, Callable, List, Optional, Sequence
 
-from torchvision._internally_replaced_utils import load_state_dict_from_url
 from torchvision.ops.misc import ConvNormActivation, SqueezeExcitation as SElayer
 from torchvision.models._utils import _make_divisible
 
@@ -272,8 +271,6 @@ def _mobilenet_v3_model(
     if pretrained:
         if model_urls.get(arch, None) is None:
             raise ValueError("No checkpoint is available for model type {}".format(arch))
-        state_dict = load_state_dict_from_url(model_urls[arch], progress=progress)
-        model.load_state_dict(state_dict)
     return model
 
 
