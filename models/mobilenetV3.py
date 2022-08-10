@@ -7,7 +7,7 @@ from timm.models import register_model
 from torch import nn, Tensor
 from typing import Any, Callable, List, Optional, Sequence
 
-from torchvision.ops.misc import ConvNormActivation, SqueezeExcitation as SElayer
+from models.misc import ConvNormActivation, SqueezeExcitation as SElayer
 from torchvision.models._utils import _make_divisible
 
 
