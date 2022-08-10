@@ -24,6 +24,7 @@ class VGG(nn.Module):
         self, features: nn.Module, num_classes: int = 1000, init_weights: bool = True, dropout: float = 0.5, **kwargs
     ) -> None:
         super().__init__()
+        self.default_cfg = {}
         self.features = features
         self.avgpool = nn.AdaptiveAvgPool2d((7, 7))
         self.classifier = nn.Sequential(
