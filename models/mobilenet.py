@@ -3,8 +3,10 @@ from timm.models import register_model
 
 
 class BetterMobileNetV1(nn.Module):
-    def __init__(self, ch_in, n_classes):
+    def __init__(self, ch_in=3, n_classes=1000, **kwargs):
         super(BetterMobileNetV1, self).__init__()
+        self.default_cfg = {}
+
 
         def conv_bn(inp, oup, stride):
             return nn.Sequential(
@@ -53,8 +55,9 @@ class BetterMobileNetV1(nn.Module):
 
 
 class MobileNetV1(nn.Module):
-    def __init__(self, ch_in, n_classes):
+    def __init__(self, ch_in=3, n_classes=1000, **kwargs):
         super(MobileNetV1, self).__init__()
+        self.default_cfg = {}
 
         def conv_bn(inp, oup, stride):
             return nn.Sequential(
