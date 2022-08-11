@@ -33,6 +33,7 @@ import models.efficientnet
 import models.vgg
 import models.mobilenet
 import models.mobilenetV3
+import models.nasnetmobile
 
 from bits import initialize_device, setup_model_and_optimizer, DeviceEnv, Monitor, Tracker,\
     TrainState, TrainServices, TrainCfg, CheckpointManager, AccuracyTopK, AvgTensor, distribute_bn
