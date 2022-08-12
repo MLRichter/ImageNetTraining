@@ -337,6 +337,6 @@ def better_mobilenet_v3_small(pretrained: bool = False, progress: bool = True, *
 
 if __name__ == '__main__':
     from rfa_toolbox import visualize_architecture, input_resolution_range, create_graph_from_pytorch_model
-    model = create_graph_from_pytorch_model(better_mobilenet_v3_large())
+    model = create_graph_from_pytorch_model(better_mobilenet_v3_small())
     print(input_resolution_range(model))
     visualize_architecture(model, "mn3").view()

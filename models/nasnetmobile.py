@@ -653,7 +653,7 @@ def nasnetamobile(num_classes=1000, pretrained=False, **kwargs):
     return model
 
 @register_model
-def better_nasnetamobile(num_classes=1000, pretrained=False, **kwargs):
+def better_nasnetamobile(num_classes=1000, pretrained=False, **kwargse):
     r"""NASNetALarge model architecture from the
     `"NASNet" <https://arxiv.org/abs/1707.07012>`_ paper.
     """
@@ -694,7 +694,7 @@ def better_nasnetamobile(num_classes=1000, pretrained=False, **kwargs):
 if __name__ == "__main__":
 
     from rfa_toolbox import input_resolution_range, create_graph_from_pytorch_model, visualize_architecture
-    model = nasnetamobile()
+    model = better_nasnetamobile()
     model.eval()
     input = torch.zeros((1, 3, 225, 225))
     model(input)
