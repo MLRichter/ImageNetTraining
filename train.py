@@ -355,12 +355,12 @@ def main():
     if args.distributed:
         args.device = 'cuda:%d' % args.local_rank
         torch.cuda.set_device(args.local_rank)
-        torch.distributed.init_process_group(backend='gloo', init_method='tcp://127.0.0.1:3456')
+        ngpus_per_node = torch.cuda.device_count()
+        args.rank = int(os.environ.get("SLURM_NODEID"))*ngpus_per_node + args.local_rank
+        torch.distributed.init_process_group(backend='gloo', init_method='tcp://127.0.0.1:3456', rank=args.rank)
         #torch.distributed.init_process_group(backend='nccl', init_method='env://')
         args.world_size = torch.distributed.get_world_size()
         #args.rank = torch.distributed.get_rank()
-        ngpus_per_node = torch.cuda.device_count()
-        args.rank = int(os.environ.get("SLURM_NODEID"))*ngpus_per_node + args.local_rank
         _logger.info('Training in distributed mode with multiple processes, 1 GPU per process. Process %d, total %d.'
                      % (args.rank, args.world_size))
     else:
