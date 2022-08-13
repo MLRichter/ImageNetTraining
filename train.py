@@ -281,7 +281,7 @@ parser.add_argument('--device', default='cuda:0',
                     help='device to use for training / testing')
 parser.add_argument('--worker-seeding', type=str, default='all',
                     help='worker seed mode (default: all)')
-parser.add_argument('--log-interval', type=int, default=50, metavar='N',
+parser.add_argument('--log-interval', type=int, default=10, metavar='N',
                     help='how many batches to wait before logging training status')
 parser.add_argument('--recovery-interval', type=int, default=0, metavar='N',
                     help='how many batches to wait before writing recovery checkpoint')
