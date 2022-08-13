@@ -22,6 +22,11 @@ import logging
 from collections import OrderedDict
 from contextlib import suppress
 from datetime import datetime
+import models.efficientnet
+import models.vgg
+import models.mobilenet
+import models.mobilenetV3
+import models.nasnetmobile
 
 import torch
 import torch.nn as nn
