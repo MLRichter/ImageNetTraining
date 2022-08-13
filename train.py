@@ -768,7 +768,7 @@ def train_one_epoch(
                     'LR: {lr:.3e}  '
                     'Data: {data_time.val:.3f} ({data_time.avg:.3f})'.format(
                         epoch,
-                        batch_idx // update_freq, len(loader) // update_freq,
+                        batch_idx, len(loader),
                         100. * batch_idx / last_idx,
                         loss=losses_m,
                         batch_time=batch_time_m,
