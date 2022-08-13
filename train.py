@@ -358,6 +358,7 @@ def main():
         ngpus_per_node = torch.cuda.device_count()
         args.rank = int(os.environ.get("SLURM_NODEID"))*ngpus_per_node + args.local_rank
         world_size = os.environ.get("$SLURM_NTASKS")
+        world_size = 1 if world_size is None else world_size
         torch.distributed.init_process_group(world_size=world_size,
                                              backend='gloo',
                                              init_method='tcp://127.0.0.1:3456',
