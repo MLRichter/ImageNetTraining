@@ -713,7 +713,6 @@ def train_one_epoch(
     end = time.time()
     last_idx = len(loader) - 1
     num_updates = epoch * len(loader)
-    optimizer.zero_grad()
     for batch_idx, (input, target) in enumerate(loader):
         last_batch = batch_idx == last_idx
         data_time_m.update(time.time() - end)
@@ -726,11 +725,12 @@ def train_one_epoch(
 
         with amp_autocast():
             output = model(input)
-            loss = loss_fn(output, target) / update_freq
+            loss = loss_fn(output, target)
 
         if not args.distributed:
             losses_m.update(loss.item(), input.size(0))
 
+        optimizer.zero_grad()
         if loss_scaler is not None:
             loss_scaler(
                 loss, optimizer,
@@ -743,11 +743,7 @@ def train_one_epoch(
                 dispatch_clip_grad(
                     model_parameters(model, exclude_head='agc' in args.clip_mode),
                     value=args.clip_grad, mode=args.clip_mode)
-        if (batch_idx + 1) % update_freq == 0:
             optimizer.step()
-            optimizer.zero_grad()
-        else:
-            continue
 
         if model_ema is not None:
             model_ema.update(model)
