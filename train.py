@@ -41,6 +41,7 @@ from timm.loss import *
 from timm.optim import create_optimizer_v2, optimizer_kwargs
 from timm.scheduler import create_scheduler
 from timm.utils import ApexScaler, NativeScaler
+from utils import NativeScalerWithGradNormCount
 
 try:
     from apex import amp
@@ -471,7 +472,8 @@ def main():
             _logger.info('Using NVIDIA APEX AMP. Training in mixed precision.')
     elif use_amp == 'native':
         amp_autocast = torch.cuda.amp.autocast
-        loss_scaler = NativeScaler()
+        #loss_scaler = NativeScaler()
+        loss_scaler = NativeScalerWithGradNormCount()
         if args.local_rank == 0:
             _logger.info('Using native Torch AMP. Training in mixed precision.')
     else:
@@ -652,6 +654,16 @@ def main():
             if args.distributed and hasattr(loader_train.sampler, 'set_epoch'):
                 loader_train.sampler.set_epoch(epoch)
 
+            #from engine import train_one_epoch
+            #train_metrics = train_one_epoch(model,
+            #                                criterion=train_loss_fn,
+            #                                data_loader=loader_train,
+            #                                optimizer=optimizer,
+            #                                loss_scaler=loss_scaler,
+            #                                model_ema=model_ema,
+            #                                mixup_fn=mixup_fn, update_freq=args.update_freq,
+            #                                use_amp=use_amp)
+
             train_metrics = train_one_epoch(
                 epoch, model, loader_train, optimizer, train_loss_fn, args,
                 lr_scheduler=lr_scheduler, saver=saver, output_dir=output_dir,
@@ -714,6 +726,8 @@ def train_one_epoch(
     last_idx = len(loader) - 1
     num_updates = epoch * len(loader)
     for batch_idx, (input, target) in enumerate(loader):
+        step = batch_idx // update_freq
+        update_grad = ((batch_idx + 1) % update_freq) == 0
         last_batch = batch_idx == last_idx
         data_time_m.update(time.time() - end)
         if not args.prefetcher:
@@ -727,31 +741,36 @@ def train_one_epoch(
             output = model(input)
             loss = loss_fn(output, target)
 
+        loss /= update_freq
+
         if not args.distributed:
             losses_m.update(loss.item(), input.size(0))
 
-        optimizer.zero_grad()
+
         if loss_scaler is not None:
             loss_scaler(
                 loss, optimizer,
                 clip_grad=args.clip_grad, clip_mode=args.clip_mode,
                 parameters=model_parameters(model, exclude_head='agc' in args.clip_mode),
-                create_graph=second_order)
+                create_graph=second_order, update_grad=update_grad)
+            if update_grad:
+                optimizer.zero_grad()
         else:
             loss.backward(create_graph=second_order)
             if args.clip_grad is not None:
                 dispatch_clip_grad(
                     model_parameters(model, exclude_head='agc' in args.clip_mode),
                     value=args.clip_grad, mode=args.clip_mode)
-            optimizer.step()
+            if update_grad:
+                optimizer.step()
 
-        if model_ema is not None:
+        if model_ema is not None and update_grad:
             model_ema.update(model)
 
         torch.cuda.synchronize()
         num_updates += 1
         batch_time_m.update(time.time() - end)
-        if last_batch or batch_idx % args.log_interval == 0:
+        if last_batch or (batch_idx // update_freq) % args.log_interval == 0:
             lrl = [param_group['lr'] for param_group in optimizer.param_groups]
             lr = sum(lrl) / len(lrl)
 
@@ -768,7 +787,7 @@ def train_one_epoch(
                     'LR: {lr:.3e}  '
                     'Data: {data_time.val:.3f} ({data_time.avg:.3f})'.format(
                         epoch,
-                        batch_idx, len(loader),
+                        batch_idx // update_freq, len(loader) // update_freq,
                         100. * batch_idx / last_idx,
                         loss=losses_m,
                         batch_time=batch_time_m,
