@@ -307,6 +307,7 @@ parser.add_argument('--eval-metric', default='top1', type=str, metavar='EVAL_MET
 parser.add_argument('--tta', type=int, default=0, metavar='N',
                     help='Test/inference time augmentation (oversampling) factor. 0=None (default: 0)')
 parser.add_argument("--local_rank", default=int(os.environ.get("SLURM_LOCALID")) , type=int)
+parser.add_argument("--world_size", default=1, type=int)
 parser.add_argument('--use-multi-epochs-loader', action='store_true', default=False,
                     help='use the multi-epochs-loader to save time at the beginning of every epoch')
 parser.add_argument('--log-wandb', action='store_true', default=False,
@@ -357,14 +358,11 @@ def main():
         torch.cuda.set_device(args.local_rank)
         ngpus_per_node = torch.cuda.device_count()
         args.rank = int(os.environ.get("SLURM_NODEID"))*ngpus_per_node + args.local_rank
-        world_size = os.environ.get("$SLURM_NTASKS")
-        world_size = 1 if world_size is None else world_size
-        torch.distributed.init_process_group(world_size=world_size,
+        torch.distributed.init_process_group(world_size=args.world_size,
                                              backend='gloo',
                                              init_method='tcp://127.0.0.1:3456',
                                              rank=args.rank)
         #torch.distributed.init_process_group(backend='nccl', init_method='env://')
-        args.world_size = world_size
         #args.rank = torch.distributed.get_rank()
         _logger.info('Training in distributed mode with multiple processes, 1 GPU per process. Process %d, total %d.'
                      % (args.rank, args.world_size))
