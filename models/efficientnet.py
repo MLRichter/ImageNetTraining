@@ -497,6 +497,20 @@ def efficientnet_b5(*args, **kwargs):
     model.num_classes = ...
     return model
 
+@register_model
+def efficientnet_b6(*args, **kwargs):
+    model = _efficientnet_b6(**kwargs)
+    model.name = "EfficentNetB6"
+    model.num_classes = ...
+    return model
+
+@register_model
+def efficientnet_b7(*args, **kwargs):
+    model = _efficientnet_b7(**kwargs)
+    model.name = "EfficentNetB7"
+    model.num_classes = ...
+    return model
+
 
 
 @register_model
