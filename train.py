@@ -349,7 +349,10 @@ def main():
     if args.log_wandb:
         if has_wandb:
             wandb.login(key="13f4789f1fcf20a514dd3d77b099ed4746992ae3")
-            wandb.init(project=args.experiment, config=args, resume="must" if args.resume != "" else None, id=args.run_id)
+            if args.local_rank == 0:
+                wandb.init(project=args.experiment, config=args, resume="must" if args.resume != "" else None, id=args.run_id)
+            else:
+                wandb.init(project=args.experiment, config=args)
         else:
             _logger.warning("You've requested to log metrics to wandb but package not found. "
                             "Metrics not being logged to wandb, try `pip install wandb`")
