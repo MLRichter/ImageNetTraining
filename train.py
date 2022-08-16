@@ -56,6 +56,11 @@ import models.convnext
 import models.convnext_isotropic
 import models.resnet
 import models.efficientnet
+import models.mnasnet
+import models.nasnetmobile
+import models.vgg
+import models.mobilenetV3
+import models.mobilenet
 
 has_native_amp = False
 try:
