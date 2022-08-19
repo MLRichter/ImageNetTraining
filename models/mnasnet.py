@@ -110,7 +110,8 @@ class MNASNet(torch.nn.Module):
         alpha: float,
         num_classes: int = 1000,
         dropout: float = 0.2,
-        better: bool = False
+        better: bool = False,
+        **kwargs
     ) -> None:
         super(MNASNet, self).__init__()
         self.default_cfg = {}
