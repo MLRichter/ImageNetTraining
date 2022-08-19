@@ -126,7 +126,7 @@ def create_dataset(
             if split in _EVAL_SYNONYM:
                 split = 'val'
             ds = ImageNet(split=split, **torch_kwargs)
-        elif name == "IMNET":
+        elif name.lower() == "IMNET".lower():
             if split in _EVAL_SYNONYM:
                 split = 'val'
             ds = ImageNetDatasetH5(split=split, **torch_kwargs)
