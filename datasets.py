@@ -7,11 +7,14 @@
 
 
 import os
+from os.path import isfile
+
 from torchvision import datasets, transforms
 
 from timm.data.constants import \
     IMAGENET_DEFAULT_MEAN, IMAGENET_DEFAULT_STD, IMAGENET_INCEPTION_MEAN, IMAGENET_INCEPTION_STD
 from timm.data import create_transform
+from data.fast_imagenet import ImageNetDatasetH5
 
 def build_dataset(is_train, args):
     transform = build_transform(is_train, args)
@@ -35,8 +38,12 @@ def build_dataset(is_train, args):
         nb_classes = 10
     elif args.data_set == 'IMNET':
         print("reading from datapath", args.data_path)
-        root = os.path.join(args.data_path, 'train' if is_train else 'val')
-        dataset = datasets.ImageFolder(root, transform=transform)
+        if isfile(args.data_path):
+            print("Detected file instead of folder, assuming hdf5")
+            dataset = ImageNetDatasetH5(args.data_path, split='train' if is_train else 'val', transform=transform)
+        else:
+            root = os.path.join(args.data_path, 'train' if is_train else 'val')
+            dataset = datasets.ImageFolder(root, transform=transform)
         nb_classes = 1000
     elif args.data_set == "image_folder":
         root = args.data_path if is_train else args.eval_data_path

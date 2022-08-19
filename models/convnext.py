@@ -203,3 +203,13 @@ def convnext_xlarge(pretrained=False, in_22k=False, **kwargs):
         checkpoint = torch.hub.load_state_dict_from_url(url=url, map_location="cpu")
         model.load_state_dict(checkpoint["model"])
     return model
+
+
+if __name__ == '__main__':
+    from rfa_toolbox import input_resolution_range, create_graph_from_pytorch_model
+    for model in [convnext_tiny, convnext_small, convnext_base, convnext_large, convnext_xlarge]:
+        model_name = model.__name__
+        arc = model()
+        graph = create_graph_from_pytorch_model(arc)
+        print(input_resolution_range(graph))
+

@@ -155,3 +155,15 @@ class SqueezeExcitation(torch.nn.Module):
     def forward(self, input: Tensor) -> Tensor:
         scale = self._scale(input)
         return scale * input
+
+
+if __name__ == '__main__':
+    from rfa_toolbox import visualize_architecture, input_resolution_range, create_graph_from_pytorch_model
+    from torchvision.models.resnet import resnet101, resnet50
+
+    for arc in [resnet50, resnet101]:
+        model_name = arc.__name__
+        model = arc()
+        graph = create_graph_from_pytorch_model(model)
+        print("Input resolution range:", input_resolution_range(graph))
+        visualize_architecture(graph, model_name=model_name, input_res=224 // 16).view()

@@ -351,6 +351,6 @@ if __name__ == '__main__':
 
     for model in [mnasnet0_5, mnasnet0_75, mnasnet1_0, mnasnet1_3]:
         name = model.__name__
-        graph = create_graph_from_pytorch_model(model(better=True))
+        graph = create_graph_from_pytorch_model(model(better=False))
         print(name, input_resolution_range(graph))
-        visualize_architecture(graph).view()
+        #visualize_architecture(graph).view()

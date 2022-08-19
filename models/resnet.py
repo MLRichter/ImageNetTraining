@@ -174,6 +174,8 @@ class ResNet(nn.Module):
         replace_stride_with_dilation: Optional[List[bool]] = None,
         norm_layer: Optional[Callable[..., nn.Module]] = None,
         layer_scale_init_value: float = 1.0,
+        stem_scaling: bool = True,
+        stride: List[int] = [1, 2, 2, 2],
         *args,
         **kwargs
     ) -> None:
@@ -196,14 +198,14 @@ class ResNet(nn.Module):
             )
         self.groups = groups
         self.base_width = width_per_group
-        self.conv1 = nn.Conv2d(3, self.inplanes, kernel_size=7, stride=2, padding=3, bias=False)
+        self.conv1 = nn.Conv2d(3, self.inplanes, kernel_size=7, stride=2 if stem_scaling else 1, padding=3, bias=False)
         self.bn1 = norm_layer(self.inplanes)
         self.relu = nn.ReLU(inplace=True)
-        self.maxpool = nn.MaxPool2d(kernel_size=3, stride=2, padding=1)
-        self.layer1 = self._make_layer(block, 64, layers[0])
-        self.layer2 = self._make_layer(block, 128, layers[1], stride=2, dilate=replace_stride_with_dilation[0])
-        self.layer3 = self._make_layer(block, 256, layers[2], stride=2, dilate=replace_stride_with_dilation[1])
-        self.layer4 = self._make_layer(block, 512, layers[3], stride=2, dilate=replace_stride_with_dilation[2])
+        self.maxpool = nn.MaxPool2d(kernel_size=3, stride=2, padding=1) if stem_scaling else lambda x: x
+        self.layer1 = self._make_layer(block, 64, layers[0], stride=stride[0])
+        self.layer2 = self._make_layer(block, 128, layers[1], stride=stride[1], dilate=replace_stride_with_dilation[0])
+        self.layer3 = self._make_layer(block, 256, layers[2], stride=stride[2], dilate=replace_stride_with_dilation[1])
+        self.layer4 = self._make_layer(block, 512, layers[3], stride=stride[3], dilate=replace_stride_with_dilation[2])
         self.avgpool = nn.AdaptiveAvgPool2d((1, 1))
         self.fc = nn.Linear(512 * block.expansion, num_classes)
 
@@ -337,8 +339,19 @@ def resnet50(pretrained: bool = False, progress: bool = True, **kwargs: Any) -> 
         pretrained (bool): If True, returns a model pre-trained on ImageNet
         progress (bool): If True, displays a progress bar of the download to stderr
     """
-    return _resnet("resnet50", Bottleneck, [3, 4, 6, 3], pretrained, progress, **kwargs)
+    return _resnet("resnet50", Bottleneck, [3, 4, 6, 3], pretrained, progress, stride=[1, 1, 2, 1], **kwargs)
 
+
+@register_model
+def better_resnet50(pretrained: bool = False, progress: bool = True, **kwargs: Any) -> ResNet:
+    r"""ResNet-50 model from
+    `"Deep Residual Learning for Image Recognition" <https://arxiv.org/pdf/1512.03385.pdf>`_.
+
+    Args:
+        pretrained (bool): If True, returns a model pre-trained on ImageNet
+        progress (bool): If True, displays a progress bar of the download to stderr
+    """
+    return _resnet("better_resnet50", Bottleneck, [3, 4, 6, 3], pretrained, progress, **kwargs)
 
 @register_model
 def resnet101(pretrained: bool = False, progress: bool = True, **kwargs: Any) -> ResNet:
@@ -426,3 +439,15 @@ def wide_resnet101_2(pretrained: bool = False, progress: bool = True, **kwargs: 
     """
     kwargs["width_per_group"] = 64 * 2
     return _resnet("wide_resnet101_2", Bottleneck, [3, 4, 23, 3], pretrained, progress, **kwargs)
+
+
+if __name__ == '__main__':
+
+    from rfa_toolbox import visualize_architecture, input_resolution_range, create_graph_from_pytorch_model
+
+    for arc in [resnet50, resnet101, wide_resnet50_2]:
+        model_name = arc.__name__
+        model = arc(stem_scaling=False)
+        graph = create_graph_from_pytorch_model(model)
+        print("Input resolution range:", input_resolution_range(graph))
+        visualize_architecture(graph, model_name=model_name, input_res=224 // 16).view()
