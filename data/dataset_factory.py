@@ -5,6 +5,9 @@ Hacked together by / Copyright 2021, Ross Wightman
 import os
 
 from torchvision.datasets import CIFAR100, CIFAR10, MNIST, QMNIST, KMNIST, FashionMNIST, ImageNet, ImageFolder
+
+from .fast_imagenet import ImageNetDatasetH5
+
 try:
     from torchvision.datasets import Places365
     has_places365 = True
@@ -123,6 +126,10 @@ def create_dataset(
             if split in _EVAL_SYNONYM:
                 split = 'val'
             ds = ImageNet(split=split, **torch_kwargs)
+        elif name == "IMNET":
+            if split in _EVAL_SYNONYM:
+                split = 'val'
+            ds = ImageNetDatasetH5(split=split, **torch_kwargs)
         elif name == 'image_folder' or name == 'folder':
             # in case torchvision ImageFolder is preferred over timm ImageDataset for some reason
             if search_split and os.path.isdir(root):

@@ -11,8 +11,10 @@ import numpy as np
 
 
 class ImageNetDatasetH5(Dataset):
-    def __init__(self, h5_path, split, transform=None, albumentations=True):
-        self.h5_path = h5_path  # Path to ilsvrc2012.hdf5
+    def __init__(self, root, split, transform=None, albumentations=True, **kwargs):
+        print("unused kwargs:", kwargs)
+        self.h5_path = root  # Path to ilsvrc2012.hdf5
+        self.root = root
         self.split = split
         self.transform = transform
         self.albumentations = albumentations
