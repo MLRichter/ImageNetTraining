@@ -445,9 +445,9 @@ if __name__ == '__main__':
 
     from rfa_toolbox import visualize_architecture, input_resolution_range, create_graph_from_pytorch_model
 
-    for arc in [resnet50, resnet101, wide_resnet50_2]:
+    for arc in [better_resnet50]:
         model_name = arc.__name__
-        model = arc(stem_scaling=False)
+        model = arc(stem_scaling=True)
         graph = create_graph_from_pytorch_model(model)
         print("Input resolution range:", input_resolution_range(graph))
         visualize_architecture(graph, model_name=model_name, input_res=224 // 16).view()

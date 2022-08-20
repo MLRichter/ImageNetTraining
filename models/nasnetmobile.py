@@ -694,6 +694,6 @@ def better_nasnetamobile(num_classes=1000, pretrained=False, **kwargse):
 if __name__ == "__main__":
 
     from rfa_toolbox import create_graph_from_pytorch_model, visualize_architecture
-    model = nasnetamobile() # replace with any torch module-object-returning function
+    model = better_nasnetamobile() # replace with any torch module-object-returning function
     graph = create_graph_from_pytorch_model(model, input_res=(1, 3, 225, 225))
     visualize_architecture(graph, "NASNET").view()
