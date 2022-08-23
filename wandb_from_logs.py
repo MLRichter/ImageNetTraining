@@ -65,7 +65,7 @@ def fetch_all_experiments(path: Path, single_experiment: bool, overwrite: bool, 
 @click.option("--single-experiment/--all", default=False, help="Path is treated as a single experiment or as a log directory with many")
 @click.option("--project", default="ImageNetSOTA", help="Name of the WANDB project")
 @click.option("--apikey", default="13f4789f1fcf20a514dd3d77b099ed4746992ae3", help="Name of the WANDB project")
-def main(path: str, overwrite: bool, single_experiment: bool, project: str, apikey: str) -> None:
+def main(data: str, overwrite: bool, single_experiment: bool, project: str, apikey: str) -> None:
     wandb.login(key=apikey)
     path = Path(path)
     if not path.exists():
