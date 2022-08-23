@@ -55,7 +55,7 @@ def fetch_all_experiments(path: Path, single_experiment: bool, overwrite: bool, 
     else:
         candidates = [path / str(directory) / project for directory in os.listdir(path)]
         filtered = [c for c in candidates if (not (c / "wandb.lock").exists()) or overwrite]
-        filtered = [c for c in filtered if (not (c / summary).exists()) or overwrite]
+        filtered = [c for c in filtered if (not (c / summary).exists())]
         filter_finished = [c for c in filtered if is_finished(c, final_epoch)]
         return filter_finished
 
