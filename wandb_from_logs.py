@@ -60,7 +60,7 @@ def fetch_all_experiments(path: Path, single_experiment: bool, overwrite: bool, 
 
 
 @click.command()
-@click.option('--data/-d', help='Path to the models logs', default="./logs")
+@click.option("--data", "--d", help='Path to the models logs', default="./logs")
 @click.option('--overwrite/--no-overwrite', default=False, help='Path to the models logs')
 @click.option("--single-experiment/--all", default=False, help="Path is treated as a single experiment or as a log directory with many")
 @click.option("--project", default="ImageNetSOTA", help="Name of the WANDB project")
