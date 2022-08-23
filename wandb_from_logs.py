@@ -12,7 +12,11 @@ import yaml
 
 def start_experiment(path: Path, project: str):
     args = get_args(path)
-    return wandb.init(project=project, config=args)
+
+    run = wandb.init(project=project, config=args)
+    wandb.run.name = path.parent.name
+    wandb.run.save()
+    return run
 
 
 def get_args(path: Path, arg_name = "args.yaml") -> Optional[Dict]:
