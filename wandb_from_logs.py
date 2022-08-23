@@ -67,7 +67,7 @@ def fetch_all_experiments(path: Path, single_experiment: bool, overwrite: bool, 
 @click.option("--apikey", default="13f4789f1fcf20a514dd3d77b099ed4746992ae3", help="Name of the WANDB project")
 def main(data: str, overwrite: bool, single_experiment: bool, project: str, apikey: str) -> None:
     wandb.login(key=apikey)
-    path = Path(path)
+    path = Path(data)
     if not path.exists():
         raise FileNotFoundError(f"Path {path} does not lead to a folder")
     experiments: List[Path] = fetch_all_experiments(path, single_experiment, overwrite, project)
