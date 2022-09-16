@@ -76,6 +76,7 @@ def make_layers(cfg: List[Union[str, int]], batch_norm: bool = False) -> nn.Sequ
 
 cfgs: Dict[str, List[Union[str, int]]] = {
     "A": [64, "M", 128, "M", 256, 256, "M", 512, 512, "M", 512, 512, "M"],
+    "A2": [64, "M", 128, "M", 256, "M", 256,  "M",  512, 512, 512, 512, "M"],
     "B": [64, 64, "M", 128, 128, "M", 256, 256, "M", 512, 512, "M", 512, 512, "M"],
     "D": [64, 64, "M", 128, 128, "M", 256, 256, 256, "M", 512, 512, 512, "M", 512, 512, 512, "M"],
     "E": [64, 64, "M", 128, 128, "M", 256, 256, 256, 256, "M", 512, 512, 512, 512, "M", 512, 512, 512, 512, "M"],
@@ -123,6 +124,30 @@ def vgg11(*, weights = None, progress: bool = True, **kwargs: Any) -> VGG:
     """
 
     return _vgg("A", False, None, progress, **kwargs)
+
+
+@register_model
+def better_vgg11_bn(*, weights = None, progress: bool = True, **kwargs: Any) -> VGG:
+    """VGG-11 from `Very Deep Convolutional Networks for Large-Scale Image Recognition <https://arxiv.org/abs/1409.1556>`__.
+
+    Args:
+        weights (:class:`~torchvision.models.VGG11_Weights`, optional): The
+            pretrained weights to use. See
+            :class:`~torchvision.models.VGG11_Weights` below for
+            more details, and possible values. By default, no pre-trained
+            weights are used.
+        progress (bool, optional): If True, displays a progress bar of the
+            download to stderr. Default is True.
+        **kwargs: parameters passed to the ``torchvision.models.vgg.VGG``
+            base class. Please refer to the `source code
+            <https://github.com/pytorch/vision/blob/main/torchvision/models/vgg.py>`_
+            for more details about this class.
+
+    .. autoclass:: torchvision.models.VGG11_Weights
+        :members:
+    """
+
+    return _vgg("A2", True, None, progress, **kwargs)
 
 
 @register_model
@@ -315,7 +340,7 @@ def better_vgg19_bn(*args, **kwargs: Any) -> VGG:
 
 if __name__ == '__main__':
     from rfa_toolbox import create_graph_from_pytorch_model, visualize_architecture, input_resolution_range
-    model = better_vgg19_bn()
+    model = better_vgg11()
     graph = create_graph_from_pytorch_model(model)
     print(input_resolution_range(graph))
     visualize_architecture(graph, "VGG19").view()

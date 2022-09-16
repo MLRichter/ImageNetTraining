@@ -21,6 +21,7 @@ def parse_args():
     parser.add_argument("--nodes", default=2, type=int, help="Number of nodes to request")
     parser.add_argument("--timeout", default=72, type=int, help="Duration of the job, in hours")
     parser.add_argument("--job_name", default="convnext", type=str, help="Job name")
+    parser.add_argument("--gpu_type", default=None, type=str, help="Job name")
     parser.add_argument("--job_dir", default="", type=str, help="Job directory; leave empty for default")
     parser.add_argument("--partition", default="learnlab", type=str, help="Partition where to submit")
     parser.add_argument("--use_volta32", action='store_true', default=True, help="Big models? Use this")

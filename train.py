@@ -328,7 +328,7 @@ parser.add_argument('--run-id', type=str, default=None,
                     help='run-id of the resumed run')
 parser.add_argument('--update_freq', default=1, type=int,
                         help='gradient accumulation steps')
-
+parser.add_argument('--copy', action='store_true', default=False)
 
 
 def _parse_args():
@@ -351,6 +351,11 @@ def _parse_args():
 def main():
     setup_default_logging()
     args, args_text = _parse_args()
+
+    import os
+    if args.copy:
+        os.system("rsync -r --info=progress ~/scratch/ilsvrc2012.hdf5 $SLURM_TMPDIR/ilsvrc2012.hdf5")
+        args.data_path = os.environ["SLURM_TMPDIR"] + "/ilsvrc2012.hdf5"
 
     if args.log_wandb:
         if has_wandb:
@@ -376,7 +381,7 @@ def main():
         ngpus_per_node = torch.cuda.device_count()
         args.rank = int(os.environ.get("SLURM_NODEID"))*ngpus_per_node + args.local_rank
         torch.distributed.init_process_group(world_size=args.world_size,
-                                             backend='gloo',
+                                             backend='nccl',
                                              init_method='tcp://127.0.0.1:3456',
                                              rank=args.rank)
         #torch.distributed.init_process_group(backend='nccl', init_method='env://')
