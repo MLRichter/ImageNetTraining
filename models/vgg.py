@@ -340,7 +340,7 @@ def better_vgg19_bn(*args, **kwargs: Any) -> VGG:
 
 if __name__ == '__main__':
     from rfa_toolbox import create_graph_from_pytorch_model, visualize_architecture, input_resolution_range
-    model = better_vgg11()
+    model = better_vgg11_bn()
     graph = create_graph_from_pytorch_model(model)
     print(input_resolution_range(graph))
     visualize_architecture(graph, "VGG19").view()
