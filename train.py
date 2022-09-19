@@ -356,6 +356,7 @@ def main():
     if args.copy:
         os.system("rsync -r --info=progress ~/scratch/ilsvrc2012.hdf5 $SLURM_TMPDIR/ilsvrc2012.hdf5")
         args.data_path = os.environ["SLURM_TMPDIR"] + "/ilsvrc2012.hdf5"
+        args.data_dir = os.environ["SLURM_TMPDIR"] + "/ilsvrc2012.hdf5"
 
     if args.log_wandb:
         if has_wandb:
