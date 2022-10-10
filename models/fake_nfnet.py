@@ -194,7 +194,10 @@ class ResNet(nn.Module):
             )
         self.groups = groups
         self.base_width = width_per_group
-        self.conv1 = nn.Conv2d(3, self.inplanes, kernel_size=7, stride=2 if stem_scaling else 1, padding=3, bias=False)
+        self.conv1 = nn.Conv2d(3, self.inplanes, kernel_size=3, stride=2 if stem_scaling else 1, padding=1, bias=False)
+        self.conv2 = nn.Conv2d(self.inplanes, self.inplanes, kernel_size=3, stride=1, padding=1, bias=False)
+        self.conv3 = nn.Conv2d(self.inplanes, self.inplanes, kernel_size=3, stride=1, padding=1, bias=False)
+        self.conv4 = nn.Conv2d(self.inplanes, self.inplanes, kernel_size=3, stride=2 if stem_scaling else 1, padding=1, bias=False)
         self.bn1 = norm_layer(self.inplanes)
         self.relu = nn.ReLU(inplace=True)
         self.maxpool = nn.MaxPool2d(kernel_size=3, stride=2, padding=1) if stem_scaling else lambda x: x
@@ -266,9 +269,10 @@ class ResNet(nn.Module):
     def _forward_impl(self, x: Tensor) -> Tensor:
         # See note [TorchScript super()]
         x = self.conv1(x)
-        x = self.bn1(x)
+        x = self.conv2(x)
+        x = self.conv3(x)
+        x = self.conv4(x)
         x = self.relu(x)
-        x = self.maxpool(x)
 
         x = self.layer1(x)
         x = self.layer2(x)
@@ -439,10 +443,10 @@ if __name__ == '__main__':
     from rfa_toolbox import visualize_architecture, input_resolution_range, create_graph_from_pytorch_model
     from fvcore.nn import FlopCountAnalysis
 
-    for arc in [better_resnet50]:
+    for arc in [resnet34]:
         model_name = arc.__name__
         model = arc(stem_scaling=True)
         graph = create_graph_from_pytorch_model(model)
         print("Input resolution range:", input_resolution_range(graph))
         print("Total flops;", FlopCountAnalysis(model, torch.ones(1, 3, 224, 224)).total())
-        #visualize_architecture(graph, model_name=model_name, input_res=224 // 16).view()
+        visualize_architecture(graph, model_name=model_name, input_res=224 // 16).view()

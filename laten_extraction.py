@@ -669,62 +669,17 @@ def main():
         with open(os.path.join(output_dir, 'args.yaml'), 'w') as f:
             f.write(args_text)
 
-    try:
-        for epoch in range(start_epoch, num_epochs):
-            if args.distributed and hasattr(loader_train.sampler, 'set_epoch'):
-                loader_train.sampler.set_epoch(epoch)
+    from extraction import extract_from_dataset, LatentRepresentationCollector
+    model.train()
+    collector = LatentRepresentationCollector(model, savepath='./latent_datasets/VOLO-D1-224', save_instantly=True, downsampling=4, save_per_position=False, overwrite=True)
+    extract_from_dataset(collector, train=True, model=model, dataset=loader_train, device="cuda:0")
+    collector.save('./latent_datasets/VOLO-D1-224')
 
-            #from engine import train_one_epoch
-            #train_metrics = train_one_epoch(model,
-            #                                criterion=train_loss_fn,
-            #                                data_loader=loader_train,
-            #                                optimizer=optimizer,
-            #                                loss_scaler=loss_scaler,
-            #                                model_ema=model_ema,
-            #                                mixup_fn=mixup_fn, update_freq=args.update_freq,
-            #                                use_amp=use_amp)
+    model.eval()
+    extract_from_dataset(collector, train=False, model=model, dataset=loader_eval, device="cuda:0")
+    collector.save('./latent_datasets/VOLO-D1-224')
 
 
-            if not args.notrain:
-                train_metrics = train_one_epoch(
-                    epoch, model, loader_train, optimizer, train_loss_fn, args,
-                    lr_scheduler=lr_scheduler, saver=saver, output_dir=output_dir,
-                    amp_autocast=amp_autocast, loss_scaler=loss_scaler, model_ema=model_ema, mixup_fn=mixup_fn,
-                update_freq=args.update_freq)
-
-            if args.distributed and args.dist_bn in ('broadcast', 'reduce'):
-                if args.local_rank == 0:
-                    _logger.info("Distributing BatchNorm running means and vars")
-                distribute_bn(model, args.world_size, args.dist_bn == 'reduce')
-
-            eval_metrics = validate(model, loader_eval, validate_loss_fn, args, amp_autocast=amp_autocast)
-
-            if model_ema is not None and not args.model_ema_force_cpu:
-                if args.distributed and args.dist_bn in ('broadcast', 'reduce'):
-                    distribute_bn(model_ema, args.world_size, args.dist_bn == 'reduce')
-                ema_eval_metrics = validate(
-                    model_ema.module, loader_eval, validate_loss_fn, args, amp_autocast=amp_autocast,
-                    log_suffix=' (EMA)')
-                eval_metrics = ema_eval_metrics
-
-            if lr_scheduler is not None:
-                # step LR for next epoch
-                lr_scheduler.step(epoch + 1, eval_metrics[eval_metric])
-
-            if output_dir is not None:
-                update_summary(
-                    epoch, train_metrics, eval_metrics, os.path.join(output_dir, 'summary.csv'),
-                    write_header=best_metric is None, log_wandb=args.log_wandb and has_wandb)
-
-            if saver is not None:
-                # save proper checkpoint with eval metric
-                save_metric = eval_metrics[eval_metric]
-                best_metric, best_epoch = saver.save_checkpoint(epoch, metric=save_metric)
-
-    except KeyboardInterrupt:
-        pass
-    if best_metric is not None:
-        _logger.info('*** Best metric: {0} (epoch {1})'.format(best_metric, best_epoch))
 
 
 def train_one_epoch(

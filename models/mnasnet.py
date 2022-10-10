@@ -1,6 +1,7 @@
 import warnings
 
 import torch
+from fvcore.nn import FlopCountAnalysis
 from timm.models import register_model
 from torch import Tensor
 import torch.nn as nn
@@ -348,10 +349,13 @@ def better_mnasnet1_3(pretrained: bool = False, progress: bool = True, **kwargs:
 
 
 if __name__ == '__main__':
-    from rfa_toolbox import visualize_architecture, input_resolution_range, create_graph_from_pytorch_model
+    if __name__ == '__main__':
+        from rfa_toolbox import create_graph_from_pytorch_model, visualize_architecture, input_resolution_range
+        import torch
 
-    for model in [mnasnet0_5, mnasnet0_75, mnasnet1_0, mnasnet1_3]:
-        name = model.__name__
-        graph = create_graph_from_pytorch_model(model(better=False))
-        print(name, input_resolution_range(graph))
-        #visualize_architecture(graph).view()
+        model = better_mnasnet1_3()  # replace with any torch module-object-returning function
+        graph = create_graph_from_pytorch_model(model, input_res=(1, 3, 224, 224))
+        flops = FlopCountAnalysis(model, torch.ones(1, 3, 224, 224)).total()
+        imin, _ = input_resolution_range(graph)
+        n_parameters = sum(p.numel() for p in model.parameters() if p.requires_grad)
+        print('Imin:', imin, '\tGFLOPS:', flops / 1000000000, "MParams:", n_parameters / 1000000)

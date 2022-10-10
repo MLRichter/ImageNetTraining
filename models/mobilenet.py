@@ -1,4 +1,5 @@
 import torch.nn as nn
+from fvcore.nn import FlopCountAnalysis
 from timm.models import register_model
 
 
@@ -105,20 +106,20 @@ class MobileNetV1(nn.Module):
         x = self.fc(x)
         return x
 
-    @register_model
-    def mobilenetV1(*args, weights=None, progress: bool = True, **kwargs):
-        return MobileNetV1(**kwargs)
+@register_model
+def mobilenetV1(*args, weights=None, progress: bool = True, **kwargs):
+    return MobileNetV1(**kwargs)
 
-    @register_model
-    def better_mobilenetV1(*args, weights=None, progress: bool = True, **kwargs):
-        return BetterMobileNetV1(**kwargs)
+@register_model
+def better_mobilenetV1(*args, weights=None, progress: bool = True, **kwargs):
+    return BetterMobileNetV1(**kwargs)
 
 if __name__=='__main__':
-    from rfa_toolbox import visualize_architecture, create_graph_from_pytorch_model, input_resolution_range, create_graph_from_tensorflow_model
-    from torchvision.models.mobilenet import mobilenet_v3_large, mobilenet_v3_small
-
-    # model check
-    model = BetterMobileNetV1(ch_in=3, n_classes=1000)
-    graph = create_graph_from_pytorch_model(model)
-    print(input_resolution_range(graph))
-    visualize_architecture(graph, "mobilenet").view()
+    from rfa_toolbox import create_graph_from_pytorch_model, visualize_architecture, input_resolution_range
+    import torch
+    model = better_mobilenetV1() # replace with any torch module-object-returning function
+    graph = create_graph_from_pytorch_model(model, input_res=(1, 3, 224, 224))
+    flops = FlopCountAnalysis(model, torch.ones(1, 3, 224, 224)).total()
+    imin, _ = input_resolution_range(graph)
+    n_parameters = sum(p.numel() for p in model.parameters() if p.requires_grad)
+    print('Imin:', imin, '\tGFLOPS:', flops / 1000000000, "MParams:", n_parameters / 1000000)

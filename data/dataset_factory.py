@@ -136,6 +136,9 @@ def create_dataset(
                 # look for split specific sub-folder in root
                 root = _search_split(root, split)
             ds = ImageFolder(root, **kwargs)
+        elif name == 'CIFAR10':
+            from torchvision.datasets import CIFAR10
+            ds = CIFAR10(root, train=is_training, transform=transform, download=True)
         else:
             assert False, f"Unknown torchvision dataset {name}"
     elif name.startswith('tfds/'):

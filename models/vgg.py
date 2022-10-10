@@ -1,5 +1,7 @@
 from functools import partial
 from typing import Any, cast, Dict, List, Optional, Union
+
+from fvcore.nn import FlopCountAnalysis
 from timm.models import register_model
 
 import torch
@@ -340,8 +342,11 @@ def better_vgg19_bn(*args, **kwargs: Any) -> VGG:
 
 if __name__ == '__main__':
     from rfa_toolbox import create_graph_from_pytorch_model, visualize_architecture, input_resolution_range
-    model = better_vgg11_bn()
-    graph = create_graph_from_pytorch_model(model)
-    print(input_resolution_range(graph))
-    visualize_architecture(graph, "VGG19").view()
+    import torch
+    model = vgg19_bn() # replace with any torch module-object-returning function
+    graph = create_graph_from_pytorch_model(model, input_res=(1, 3, 224, 224))
+    flops = FlopCountAnalysis(model, torch.ones(1, 3, 224, 224)).total()
+    imin, _ = input_resolution_range(graph)
+    n_parameters = sum(p.numel() for p in model.parameters() if p.requires_grad)
+    print('Imin:', imin, '\tGFLOPS:', flops / 1000000000, "MParams:", n_parameters / 1000000)
 

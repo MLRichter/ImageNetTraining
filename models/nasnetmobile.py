@@ -15,6 +15,7 @@ import torch
 import torch.nn as nn
 import torch.nn.functional as F
 import torch.utils.model_zoo as model_zoo
+from fvcore.nn import FlopCountAnalysis
 from timm.models import register_model
 from torch.autograd import Variable
 import numpy as np
@@ -691,9 +692,12 @@ def better_nasnetamobile(num_classes=1000, pretrained=False, **kwargse):
 
 
 
-if __name__ == "__main__":
-
-    from rfa_toolbox import create_graph_from_pytorch_model, visualize_architecture
-    model = better_nasnetamobile() # replace with any torch module-object-returning function
+if __name__=='__main__':
+    from rfa_toolbox import create_graph_from_pytorch_model, visualize_architecture, input_resolution_range
+    import torch
+    model = nasnetamobile() # replace with any torch module-object-returning function
     graph = create_graph_from_pytorch_model(model, input_res=(1, 3, 225, 225))
-    visualize_architecture(graph, "NASNET").view()
+    flops = FlopCountAnalysis(model, torch.ones(1, 3, 225, 225)).total()
+    imin, _ = input_resolution_range(graph)
+    n_parameters = sum(p.numel() for p in model.parameters() if p.requires_grad)
+    print('Imin:', imin, '\tGFLOPS:', flops / 1000000000, "MParams:", n_parameters / 1000000)

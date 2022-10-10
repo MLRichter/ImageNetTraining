@@ -1422,11 +1422,14 @@ if __name__ == '__main__':
         #efficientnet_b7_perf42,
         #efficientnet_b7_perf5,
     ]
-    for model  in models:
+    for model, res in zip(models, [224, 240, 260, 300, 380, 456, 528, 600]):
         model = model().cpu()
         name = model.name
-        graph = create_graph_from_pytorch_model(model, input_res=(1, 3, 224, 224),
-                                                custom_layers=["SqueezeExcitation", "ConvNormActivation"])
-        imin, imax = input_resolution_range(graph)
-        print(name, ":", *imin)
-        visualize_architecture(graph, "EfficientNet", input_res=224).view()
+        from rfa_toolbox import create_graph_from_pytorch_model, visualize_architecture, input_resolution_range
+        import torch
+
+        graph = create_graph_from_pytorch_model(model, input_res=(1, 3, res, res))
+        #flops = FlopCountAnalysis(model, torch.ones(1, 3, res, res)).total()
+        imin, _ = input_resolution_range(graph)
+        n_parameters = sum(p.numel() for p in model.parameters() if p.requires_grad)
+        #print('Model:', f'{name}', '\tImin:', imin, '\tGFLOPS:', flops / 1000000000, "MParams:", n_parameters / 1000000)

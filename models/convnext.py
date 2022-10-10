@@ -9,6 +9,7 @@
 import torch
 import torch.nn as nn
 import torch.nn.functional as F
+from fvcore.nn import FlopCountAnalysis
 from timm.models.layers import trunc_normal_, DropPath
 from timm.models.registry import register_model
 
@@ -256,11 +257,13 @@ def convnext_xlarge(pretrained=False, in_22k=False, **kwargs):
 
 
 if __name__ == '__main__':
-    from rfa_toolbox import input_resolution_range, create_graph_from_pytorch_model, visualize_architecture
-    for model in [better_convnext_tiny, convnext_tiny, convnext_small, convnext_base, convnext_large, convnext_xlarge]:
-        model_name = model.__name__
-        arc = model()
-        graph = create_graph_from_pytorch_model(arc)
-        print(input_resolution_range(graph))
-        #visualize_architecture(graph, model_name="ConvNeXT").view()
+    from rfa_toolbox import create_graph_from_pytorch_model, visualize_architecture, input_resolution_range
+    import torch
+
+    model = convnext_large()  # replace with any torch module-object-returning function
+    graph = create_graph_from_pytorch_model(model, input_res=(1, 3, 224, 224))
+    flops = FlopCountAnalysis(model, torch.ones(1, 3, 224, 224)).total()
+    imin, _ = input_resolution_range(graph)
+    n_parameters = sum(p.numel() for p in model.parameters() if p.requires_grad)
+    print('Imin:', imin, '\tGFLOPS:', flops / 1000000000, "MParams:", n_parameters / 1000000)
 

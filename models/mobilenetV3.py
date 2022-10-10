@@ -3,6 +3,7 @@ import torch
 
 from functools import partial
 
+from fvcore.nn import FlopCountAnalysis
 from timm.models import register_model
 from torch import nn, Tensor
 from typing import Any, Callable, List, Optional, Sequence
@@ -336,7 +337,12 @@ def better_mobilenet_v3_small(pretrained: bool = False, progress: bool = True, *
     return _mobilenet_v3_model(arch, inverted_residual_setting, last_channel, pretrained, progress, **kwargs)
 
 if __name__ == '__main__':
-    from rfa_toolbox import visualize_architecture, input_resolution_range, create_graph_from_pytorch_model
-    model = create_graph_from_pytorch_model(better_mobilenet_v3_small())
-    print(input_resolution_range(model))
-    visualize_architecture(model, "mn3").view()
+    from rfa_toolbox import create_graph_from_pytorch_model, visualize_architecture, input_resolution_range
+
+    model = better_mobilenet_v3_small() # replace with any torch module-object-returning function
+    graph = create_graph_from_pytorch_model(model, input_res=(1, 3, 224, 224))
+    flops = FlopCountAnalysis(model, torch.ones(1, 3, 224, 224)).total()
+    imin, _ = input_resolution_range(graph)
+    n_parameters = sum(p.numel() for p in model.parameters() if p.requires_grad)
+    print('Imin:', imin, '\tGFLOPS:', flops / 1000000000, "MParams:", n_parameters / 1000000)
+    visualize_architecture(graph, "NASNET").view()
