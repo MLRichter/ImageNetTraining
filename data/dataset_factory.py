@@ -61,7 +61,7 @@ def create_dataset(
         class_map=None,
         load_bytes=False,
         is_training=False,
-        download=False,
+        download=True,
         batch_size=None,
         repeats=0,
         **kwargs
