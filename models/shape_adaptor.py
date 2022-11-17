@@ -71,7 +71,7 @@ VGG Network
 
 
 class VGG(nn.Module):
-    def __init__(self, input_shape=32, output_shape=8, dataset=None, mode=None, sa_num=None, type='D', better=False, num_classes=10):
+    def __init__(self, input_shape=32, output_shape=8, dataset=None, mode=None, sa_num=None, type='D', better=False, num_classes=10, **kwargs):
         super(VGG, self).__init__()
         self.num_classes = num_classes
         self.dataset = dataset
@@ -837,7 +837,7 @@ def better_resnet50_sa(pretrained: bool = False, progress: bool = True, **kwargs
 
 @register_model
 def better_vgg_sa(pretrained: bool = False, progress: bool = True, **kwargs: Any) -> ResNet:
-    model = VGG(type="D3")
+    model = VGG(type="D3", **kwargs)
     return model
 
 CLASS_NB = {'cifar10':  10,
