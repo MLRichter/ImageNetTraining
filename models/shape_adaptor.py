@@ -71,7 +71,7 @@ VGG Network
 
 
 class VGG(nn.Module):
-    def __init__(self, input_shape=32, output_shape=8, dataset=None, mode=None, sa_num=None, type='D', better=False, num_classes=10, **kwargs):
+    def __init__(self, input_shape=32, output_shape=8, dataset=None, mode=None, sa_num=None, type='D', better=False, num_classes=100, **kwargs):
         super(VGG, self).__init__()
         self.num_classes = num_classes
         self.dataset = dataset
