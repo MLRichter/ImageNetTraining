@@ -837,7 +837,7 @@ def better_resnet50_sa(pretrained: bool = False, progress: bool = True, **kwargs
 
 @register_model
 def better_vgg_sa(pretrained: bool = False, progress: bool = True, **kwargs: Any) -> ResNet:
-    model = VGG(type="D3", **kwargs)
+    model = VGG(type="D3", mode="cifar-human", dataset="cifar100", **kwargs)
     return model
 
 CLASS_NB = {'cifar10':  10,
