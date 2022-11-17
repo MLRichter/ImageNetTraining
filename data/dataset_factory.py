@@ -139,6 +139,9 @@ def create_dataset(
         elif name == 'CIFAR10':
             from torchvision.datasets import CIFAR10
             ds = CIFAR10(root, train=is_training, transform=transform, download=True)
+        elif name == 'CIFAR100':
+            from torchvision.datasets import CIFAR100
+            ds = CIFAR100(root, train=is_training, transform=transform, download=True)
         else:
             assert False, f"Unknown torchvision dataset {name}"
     elif name.startswith('tfds/'):

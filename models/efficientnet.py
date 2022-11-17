@@ -1398,14 +1398,14 @@ if __name__ == '__main__':
     from rfa_toolbox import create_graph_from_pytorch_model, visualize_architecture, input_resolution_range
     from torchvision.models import resnet18
     models = [
-        efficientnet_b0_perf43,
-        efficientnet_b1_perf43,
-        efficientnet_b2_perf43,
-        efficientnet_b3_perf43,
-        efficientnet_b4_perf43,
-        efficientnet_b5_perf43,
-        efficientnet_b6_perf43,
-        efficientnet_b7_perf43,
+        #efficientnet_b0_perf43,
+        #efficientnet_b1_perf43,
+        #efficientnet_b2_perf43,
+        #efficientnet_b3_perf43,
+        #efficientnet_b4_perf43,
+        #efficientnet_b5_perf43,
+        #efficientnet_b6_perf43,
+        efficientnet_b7,
         #efficientnet_b0_perf5,
         #efficientnet_b1_perf4,
         #efficientnet_b1_perf5,
@@ -1430,6 +1430,7 @@ if __name__ == '__main__':
 
         graph = create_graph_from_pytorch_model(model, input_res=(1, 3, res, res))
         #flops = FlopCountAnalysis(model, torch.ones(1, 3, res, res)).total()
-        imin, _ = input_resolution_range(graph)
+        imin, imax = input_resolution_range(graph)
         n_parameters = sum(p.numel() for p in model.parameters() if p.requires_grad)
+        print(imax)
         #print('Model:', f'{name}', '\tImin:', imin, '\tGFLOPS:', flops / 1000000000, "MParams:", n_parameters / 1000000)

@@ -260,7 +260,7 @@ if __name__ == '__main__':
     from rfa_toolbox import create_graph_from_pytorch_model, visualize_architecture, input_resolution_range
     import torch
 
-    model = convnext_large()  # replace with any torch module-object-returning function
+    model = better_convnext_large()  # replace with any torch module-object-returning function
     graph = create_graph_from_pytorch_model(model, input_res=(1, 3, 224, 224))
     flops = FlopCountAnalysis(model, torch.ones(1, 3, 224, 224)).total()
     imin, _ = input_resolution_range(graph)

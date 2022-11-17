@@ -654,6 +654,14 @@ def _create_volo(variant, pretrained=False, **kwargs):
     return build_model_with_cfg(VOLO, variant, pretrained, **kwargs)
 
 
+
+@register_model
+def volo_d1_32_cut(pretrained=False, **kwargs):
+    """ VOLO-D1 model, Params: 27M """
+    model_args = dict(layers=(0, 0, 0, 2), embed_dims=(384, 384, 384, 384), num_heads=(0, 0, 0, 12), **kwargs)
+    model = _create_volo('volo_d1_32', pretrained=pretrained, **model_args)
+    return model
+
 @register_model
 def volo_d1_32(pretrained=False, **kwargs):
     """ VOLO-D1 model, Params: 27M """
@@ -661,6 +669,13 @@ def volo_d1_32(pretrained=False, **kwargs):
     model = _create_volo('volo_d1_32', pretrained=pretrained, **model_args)
     return model
 
+
+@register_model
+def volo_d1_224_cut(pretrained=False, **kwargs):
+    """ VOLO-D1 model, Params: 27M """
+    model_args = dict(layers=(0, 0, 0, 2), embed_dims=(384, 384, 384, 384), num_heads=(0, 0, 0, 12), **kwargs)
+    model = _create_volo('volo_d1_224', pretrained=pretrained, **model_args)
+    return model
 
 @register_model
 def volo_d1_224(pretrained=False, **kwargs):
@@ -764,5 +779,5 @@ def volo_d5_512(pretrained=False, **kwargs):
 
 if __name__ == "__main__":
     import torch
-    model = volo_d1_32() # replace with any torch module-object-returning function
-    model(torch.ones(1, 3, 32, 32))
+    model = volo_d1_224_cut() # replace with any torch module-object-returning function
+    model(torch.ones(1, 3, 224, 224))

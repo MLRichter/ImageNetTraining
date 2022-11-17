@@ -177,6 +177,7 @@ class ResNet(nn.Module):
         **kwargs
     ) -> None:
         super().__init__()
+        self.num_classes = num_classes
         if norm_layer is None:
             norm_layer = nn.BatchNorm2d
         self._norm_layer = norm_layer
@@ -324,18 +325,6 @@ def resnet34(pretrained: bool = False, progress: bool = True, **kwargs: Any) -> 
 
 
 @register_model
-def resnet50(pretrained: bool = False, progress: bool = True, **kwargs: Any) -> ResNet:
-    r"""ResNet-50 model from
-    `"Deep Residual Learning for Image Recognition" <https://arxiv.org/pdf/1512.03385.pdf>`_.
-
-    Args:
-        pretrained (bool): If True, returns a model pre-trained on ImageNet
-        progress (bool): If True, displays a progress bar of the download to stderr
-    """
-    return _resnet("resnet50", Bottleneck, [3, 4, 6, 3], pretrained, progress, stride=[1, 1, 2, 1], **kwargs)
-
-
-@register_model
 def better_resnet50(pretrained: bool = False, progress: bool = True, **kwargs: Any) -> ResNet:
     r"""ResNet-50 model from
     `"Deep Residual Learning for Image Recognition" <https://arxiv.org/pdf/1512.03385.pdf>`_.
@@ -344,7 +333,7 @@ def better_resnet50(pretrained: bool = False, progress: bool = True, **kwargs: A
         pretrained (bool): If True, returns a model pre-trained on ImageNet
         progress (bool): If True, displays a progress bar of the download to stderr
     """
-    return _resnet("better_resnet50", Bottleneck, [3, 4, 6, 3], pretrained, progress, **kwargs)
+    return _resnet("better_resnet50", Bottleneck, [3, 4, 6, 3], pretrained, progress, stem_scaling=False, stride=[1, 2, 1, 2], **kwargs)
 
 @register_model
 def resnet101(pretrained: bool = False, progress: bool = True, **kwargs: Any) -> ResNet:
@@ -441,7 +430,7 @@ if __name__ == '__main__':
 
     for arc in [better_resnet50]:
         model_name = arc.__name__
-        model = arc(stem_scaling=True)
+        model = arc()
         graph = create_graph_from_pytorch_model(model)
         print("Input resolution range:", input_resolution_range(graph))
         print("Total flops;", FlopCountAnalysis(model, torch.ones(1, 3, 224, 224)).total())

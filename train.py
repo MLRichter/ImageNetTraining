@@ -28,6 +28,7 @@ import models.mobilenet
 import models.mobilenetV3
 import models.nasnetmobile
 import models.volo
+import models.shape_adaptor
 
 import torch
 import torch.nn as nn
@@ -62,6 +63,7 @@ import models.mnasnet
 import models.nasnetmobile
 import models.vgg
 import models.mobilenetV3
+import models.mobilenetv2
 import models.mobilenet
 
 has_native_amp = False
@@ -279,7 +281,7 @@ parser.add_argument('--model-ema', action='store_true', default=False,
                     help='Enable tracking moving average of model weights')
 parser.add_argument('--model-ema-force-cpu', action='store_true', default=False,
                     help='Force ema to be tracked on CPU, rank=0 node only. Disables EMA validation.')
-parser.add_argument('--model-ema-decay', type=float, default=0.9998,
+parser.add_argument('--model-ema-decay', type=float, default=0.9999,
                     help='decay factor for model weights moving average (default: 0.9998)')
 
 # Misc
