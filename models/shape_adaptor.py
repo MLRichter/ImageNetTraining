@@ -71,8 +71,9 @@ VGG Network
 
 
 class VGG(nn.Module):
-    def __init__(self, input_shape=32, output_shape=8, dataset=None, mode=None, sa_num=None, type='D', better=False):
+    def __init__(self, input_shape=32, output_shape=8, dataset=None, mode=None, sa_num=None, type='D', better=False, num_classes=10):
         super(VGG, self).__init__()
+        self.num_classes = num_classes
         self.dataset = dataset
         self.mode = mode
         self.sa_num = sa_num
@@ -142,7 +143,7 @@ class VGG(nn.Module):
 
         # define fully-connected prediction layers; we use one fc-layer across all networks for consistency
         self.classifier = nn.Sequential(
-            nn.Linear(512, CLASS_NB[dataset]),
+            nn.Linear(512, num_classes),
         )
 
         if 'human' not in self.mode:
@@ -831,6 +832,12 @@ def better_resnet50_sa(pretrained: bool = False, progress: bool = True, **kwargs
     model = ResNet(Bottleneck, [3, 4, 6, 3], strides=[1, 1, 2, 1], sa_num=None,
            dataset="cifar100", mode="human-cifar",
            input_shape=32, output_shape=8, **kwargs)
+    return model
+
+
+@register_model
+def better_vgg_sa(pretrained: bool = False, progress: bool = True, **kwargs: Any) -> ResNet:
+    model = VGG(type="D3")
     return model
 
 CLASS_NB = {'cifar10':  10,
