@@ -96,10 +96,11 @@ def create_dataset(
     name = name.lower()
     if name.startswith('torch/'):
         name = name.split('/', 2)[-1]
-        torch_kwargs = dict(root=root, download=download, **kwargs)
+        torch_kwargs = dict(root=root, download=True, **kwargs)
         if name in _TORCH_BASIC_DS:
             ds_class = _TORCH_BASIC_DS[name]
             use_train = split in _TRAIN_SYNONYM
+            print(torch_kwargs)
             ds = ds_class(train=use_train, **torch_kwargs)
         elif name == 'inaturalist' or name == 'inat':
             assert has_inaturalist, 'Please update to PyTorch 1.10, torchvision 0.11+ for Inaturalist'
