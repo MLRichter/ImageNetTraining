@@ -29,6 +29,7 @@ import models.mobilenetV3
 import models.nasnetmobile
 import models.volo
 import models.shape_adaptor
+import models.inceptionv3
 
 import torch
 import torch.nn as nn
