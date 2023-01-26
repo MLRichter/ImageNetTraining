@@ -322,7 +322,7 @@ parser.add_argument('--eval-metric', default='top1', type=str, metavar='EVAL_MET
                     help='Best metric (default: "top1"')
 parser.add_argument('--tta', type=int, default=0, metavar='N',
                     help='Test/inference time augmentation (oversampling) factor. 0=None (default: 0)')
-parser.add_argument("--local_rank", default=0 if os.environ.get("SLURM_LOCALID") is not None else os.environ.get("SLURM_LOCALID")  , type=int)
+parser.add_argument("--local_rank", default=0 if os.environ.get("SLURM_LOCALID") is not None else os.environ.get("SLURM_LOCALID") , type=int)
 parser.add_argument("--world_size", default=1, type=int)
 parser.add_argument('--use-multi-epochs-loader', action='store_true', default=False,
                     help='use the multi-epochs-loader to save time at the beginning of every epoch')
@@ -356,8 +356,10 @@ def _parse_args():
 
 
 def main():
+
     setup_default_logging()
     args, args_text = _parse_args()
+    print("Start process with local rank", args.local_rank)
 
     import os
     if args.copy:
@@ -385,6 +387,7 @@ def main():
     #args.world_size = 1
     args.rank = 0  # global rank
     if args.distributed:
+        print("Initializing process", args.rank, "with local rank", args.local_rank)
         args.device = 'cuda:%d' % args.local_rank
         torch.cuda.set_device(args.local_rank)
         ngpus_per_node = torch.cuda.device_count()
