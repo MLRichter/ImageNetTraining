@@ -387,11 +387,11 @@ def main():
     #args.world_size = 1
     args.rank = 0  # global rank
     if args.distributed:
-        print("Initializing process", args.rank, "with local rank", args.local_rank)
         args.device = 'cuda:%d' % args.local_rank
         torch.cuda.set_device(args.local_rank)
         ngpus_per_node = torch.cuda.device_count()
         args.rank = int(os.environ.get("SLURM_NODEID"))*ngpus_per_node + args.local_rank
+        print("Initializing process", args.rank, "with local rank", args.local_rank)
         torch.distributed.init_process_group(world_size=args.world_size,
                                              backend='nccl',
                                              init_method='env://',
