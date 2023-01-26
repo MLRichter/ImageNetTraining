@@ -499,7 +499,7 @@ if __name__ == '__main__':
     from rfa_toolbox import visualize_architecture, input_resolution_range, create_graph_from_pytorch_model
     from fvcore.nn import FlopCountAnalysis
 
-    for arc in [inception_v3, better_inception_v3]:
+    for arc in [my_inception_v3, better_inception_v3]:
         model_name = arc.__name__
         model = arc(aux_logits=False)
         graph = create_graph_from_pytorch_model(model)
