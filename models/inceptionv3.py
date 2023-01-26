@@ -431,13 +431,11 @@ class Inception_V3_Weights(WeightsEnum):
 
 
 @register_model
-@handle_legacy_interface(weights=("pretrained", Inception_V3_Weights.IMAGENET1K_V1))
 def better_inception_v3(*, weights: Optional[Inception_V3_Weights] = None, progress: bool = True, **kwargs: Any) -> Inception3:
-    return inception_v3(better=True)
+    return inception_v3(better=True, **kwargs)
 
 
 @register_model
-@handle_legacy_interface(weights=("pretrained", Inception_V3_Weights.IMAGENET1K_V1))
 def inception_v3(*, weights: Optional[Inception_V3_Weights] = None, progress: bool = True, **kwargs: Any) -> Inception3:
     """
     Inception v3 model architecture from
