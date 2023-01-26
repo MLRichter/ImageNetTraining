@@ -66,6 +66,7 @@ import models.vgg
 import models.mobilenetV3
 import models.mobilenetv2
 import models.mobilenet
+import models.densenet
 
 has_native_amp = False
 try:
