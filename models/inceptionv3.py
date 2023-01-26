@@ -15,9 +15,6 @@ from torchvision.models._meta import _IMAGENET_CATEGORIES
 from torchvision.models._utils import handle_legacy_interface, _ovewrite_named_param
 
 
-__all__ = ["Inception3", "InceptionOutputs", "_InceptionOutputs", "Inception_V3_Weights", "inception_v3"]
-
-
 InceptionOutputs = namedtuple("InceptionOutputs", ["logits", "aux_logits"])
 InceptionOutputs.__annotations__ = {"logits": Tensor, "aux_logits": Optional[Tensor]}
 
@@ -462,24 +459,8 @@ def my_inception_v3(*, weights: Optional[Inception_V3_Weights] = None, progress:
     .. autoclass:: torchvision.models.Inception_V3_Weights
         :members:
     """
-    weights = Inception_V3_Weights.verify(weights)
-
-    original_aux_logits = kwargs.get("aux_logits", False)
-    if weights is not None:
-        if "transform_input" not in kwargs:
-            _ovewrite_named_param(kwargs, "transform_input", True)
-        _ovewrite_named_param(kwargs, "aux_logits", True)
-        _ovewrite_named_param(kwargs, "init_weights", False)
-        _ovewrite_named_param(kwargs, "num_classes", len(weights.meta["categories"]))
     kwargs["aux_logits"] = False
     model = Inception3(**kwargs)
-
-    if weights is not None:
-        model.load_state_dict(weights.get_state_dict(progress=progress))
-        if not original_aux_logits:
-            model.aux_logits = False
-            model.AuxLogits = None
-
     return model
 
 
