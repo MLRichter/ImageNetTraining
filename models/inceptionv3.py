@@ -433,11 +433,11 @@ class Inception_V3_Weights(WeightsEnum):
 
 @register_model
 def better_inception_v3(*, weights: Optional[Inception_V3_Weights] = None, progress: bool = True, **kwargs: Any) -> Inception3:
-    return inception_v3(better=True, **kwargs)
+    return my_inception_v3(better=True, **kwargs)
 
 
 @register_model
-def inception_v3(*, weights: Optional[Inception_V3_Weights] = None, progress: bool = True, **kwargs: Any) -> Inception3:
+def my_inception_v3(*, weights: Optional[Inception_V3_Weights] = None, progress: bool = True, **kwargs: Any) -> Inception3:
     """
     Inception v3 model architecture from
     `Rethinking the Inception Architecture for Computer Vision <http://arxiv.org/abs/1512.00567>`_.
@@ -471,7 +471,7 @@ def inception_v3(*, weights: Optional[Inception_V3_Weights] = None, progress: bo
         _ovewrite_named_param(kwargs, "aux_logits", True)
         _ovewrite_named_param(kwargs, "init_weights", False)
         _ovewrite_named_param(kwargs, "num_classes", len(weights.meta["categories"]))
-
+    kwargs["aux_logits"] = False
     model = Inception3(**kwargs)
 
     if weights is not None:
