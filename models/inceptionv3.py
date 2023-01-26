@@ -35,7 +35,8 @@ class Inception3(nn.Module):
         inception_blocks: Optional[List[Callable[..., nn.Module]]] = None,
         init_weights: Optional[bool] = None,
         dropout: float = 0.5,
-        better: bool = False
+        better: bool = False,
+            **kwargs
     ) -> None:
         super().__init__()
         _log_api_usage_once(self)
