@@ -391,7 +391,7 @@ def main():
         args.rank = int(os.environ.get("SLURM_NODEID"))*ngpus_per_node + args.local_rank
         torch.distributed.init_process_group(world_size=args.world_size,
                                              backend='nccl',
-                                             init_method='tcp://127.0.0.1:3456',
+                                             init_method='env://',
                                              rank=args.rank)
         #torch.distributed.init_process_group(backend='nccl', init_method='env://')
         #args.rank = torch.distributed.get_rank()
