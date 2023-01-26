@@ -389,7 +389,7 @@ def main():
     if args.distributed:
         args.rank = int(os.environ.get("SLURM_PROCID"))
         args.local_rank = int(os.environ.get("SLURM_LOCALID"))
-        args.device = 'cuda:%d' % args.local_rank
+        args.device = args.local_rank
         print("Initializing process", args.rank, "with local rank", args.local_rank, "using device", args.device)
 
         torch.cuda.set_device(args.local_rank)
