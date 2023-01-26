@@ -7,6 +7,7 @@ import torch
 import torch.nn as nn
 import torch.nn.functional as F
 import torch.utils.checkpoint as cp
+from timm.models import register_model
 from torch import Tensor
 
 from torchvision.transforms._presets import ImageClassification
@@ -351,7 +352,7 @@ class DenseNet201_Weights(WeightsEnum):
     DEFAULT = IMAGENET1K_V1
 
 
-@handle_legacy_interface(weights=("pretrained", DenseNet121_Weights.IMAGENET1K_V1))
+@register_model
 def densenet121(*, weights: Optional[DenseNet121_Weights] = None, progress: bool = True, **kwargs: Any) -> DenseNet:
     r"""Densenet-121 model from
     `Densely Connected Convolutional Networks <https://arxiv.org/abs/1608.06993>`_.
@@ -376,7 +377,7 @@ def densenet121(*, weights: Optional[DenseNet121_Weights] = None, progress: bool
     return _densenet(32, (6, 12, 24, 16), 64, weights, progress, **kwargs)
 
 
-@handle_legacy_interface(weights=("pretrained", DenseNet161_Weights.IMAGENET1K_V1))
+@register_model
 def densenet161(*, weights: Optional[DenseNet161_Weights] = None, progress: bool = True, **kwargs: Any) -> DenseNet:
     r"""Densenet-161 model from
     `Densely Connected Convolutional Networks <https://arxiv.org/abs/1608.06993>`_.
@@ -401,7 +402,7 @@ def densenet161(*, weights: Optional[DenseNet161_Weights] = None, progress: bool
     return _densenet(48, (6, 12, 36, 24), 96, weights, progress, **kwargs)
 
 
-@handle_legacy_interface(weights=("pretrained", DenseNet169_Weights.IMAGENET1K_V1))
+@register_model
 def densenet169(*, weights: Optional[DenseNet169_Weights] = None, progress: bool = True, **kwargs: Any) -> DenseNet:
     r"""Densenet-169 model from
     `Densely Connected Convolutional Networks <https://arxiv.org/abs/1608.06993>`_.
@@ -426,7 +427,7 @@ def densenet169(*, weights: Optional[DenseNet169_Weights] = None, progress: bool
     return _densenet(32, (6, 12, 32, 32), 64, weights, progress, **kwargs)
 
 
-@handle_legacy_interface(weights=("pretrained", DenseNet201_Weights.IMAGENET1K_V1))
+@register_model
 def densenet201(*, weights: Optional[DenseNet201_Weights] = None, progress: bool = True, **kwargs: Any) -> DenseNet:
     r"""Densenet-201 model from
     `Densely Connected Convolutional Networks <https://arxiv.org/abs/1608.06993>`_.
@@ -450,8 +451,7 @@ def densenet201(*, weights: Optional[DenseNet201_Weights] = None, progress: bool
 
     return _densenet(32, (6, 12, 48, 32), 64, weights, progress, **kwargs)
 
-
-@handle_legacy_interface(weights=("pretrained", DenseNet121_Weights.IMAGENET1K_V1))
+@register_model
 def better_densenet121(*, weights: Optional[DenseNet121_Weights] = None, progress: bool = True, **kwargs: Any) -> DenseNet:
     r"""Densenet-121 model from
     `Densely Connected Convolutional Networks <https://arxiv.org/abs/1608.06993>`_.
@@ -476,7 +476,7 @@ def better_densenet121(*, weights: Optional[DenseNet121_Weights] = None, progres
     return _densenet(32, (6, 12, 24, 16), 64, weights, progress, better=True, **kwargs)
 
 
-@handle_legacy_interface(weights=("pretrained", DenseNet161_Weights.IMAGENET1K_V1))
+@register_model
 def better_densenet161(*, weights: Optional[DenseNet161_Weights] = None, progress: bool = True, **kwargs: Any) -> DenseNet:
     r"""Densenet-161 model from
     `Densely Connected Convolutional Networks <https://arxiv.org/abs/1608.06993>`_.
@@ -501,7 +501,7 @@ def better_densenet161(*, weights: Optional[DenseNet161_Weights] = None, progres
     return _densenet(48, (6, 12, 36, 24), 96, weights, progress, better=True,  **kwargs)
 
 
-@handle_legacy_interface(weights=("pretrained", DenseNet169_Weights.IMAGENET1K_V1))
+@register_model
 def better_densenet169(*, weights: Optional[DenseNet169_Weights] = None, progress: bool = True, **kwargs: Any) -> DenseNet:
     r"""Densenet-169 model from
     `Densely Connected Convolutional Networks <https://arxiv.org/abs/1608.06993>`_.
@@ -526,7 +526,7 @@ def better_densenet169(*, weights: Optional[DenseNet169_Weights] = None, progres
     return _densenet(32, (6, 12, 32, 32), 64, weights, progress, better=True,  **kwargs)
 
 
-@handle_legacy_interface(weights=("pretrained", DenseNet201_Weights.IMAGENET1K_V1))
+@register_model
 def better_densenet201(*, weights: Optional[DenseNet201_Weights] = None, progress: bool = True, **kwargs: Any) -> DenseNet:
     r"""Densenet-201 model from
     `Densely Connected Convolutional Networks <https://arxiv.org/abs/1608.06993>`_.
