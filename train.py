@@ -69,6 +69,7 @@ import models.mobilenet
 import models.densenet
 
 has_native_amp = False
+
 try:
     if getattr(torch.cuda.amp, 'autocast') is not None:
         has_native_amp = True
