@@ -207,6 +207,21 @@ def _mobilenet_v3_conf(arch: str, width_mult: float = 1.0, reduced_tail: bool = 
             bneck_conf(160 // reduce_divider, 5, 960 // reduce_divider, 160 // reduce_divider, True, "HS", 1, dilation),
         ]
         last_channel = adjust_channels(1280 // reduce_divider)  # C5
+    elif arch == "efficient_mobilenet_v3_small":
+        inverted_residual_setting = [
+            bneck_conf(16, 3, 16, 16, True, "RE", 2, 1),  # C1
+            bneck_conf(16, 3, 72, 24, False, "RE", 2, 1),  # C2
+            bneck_conf(24, 3, 88, 24, False, "RE", 1, 1),
+            bneck_conf(24, 5, 96, 40, True, "HS", 2, 1),  # C3
+            bneck_conf(40, 5, 240, 40, True, "HS", 1, 1),
+            bneck_conf(40, 5, 240, 40, True, "HS", 1, 1),
+            bneck_conf(40, 5, 120, 48, True, "HS", 1, 1),
+            bneck_conf(48, 5, 144, 48, True, "HS", 1, 1),
+            bneck_conf(48, 5, 288, 96 // reduce_divider, True, "HS", 2, dilation),  # C4
+            #bneck_conf(96 // reduce_divider, 5, 576 // reduce_divider, 96 // reduce_divider, True, "HS", 1, dilation),
+            #bneck_conf(96 // reduce_divider, 5, 576 // reduce_divider, 96 // reduce_divider, True, "HS", 1, dilation),
+        ]
+        last_channel = adjust_channels(1024 // reduce_divider)  # C5
     elif arch == "mobilenet_v3_small":
         inverted_residual_setting = [
             bneck_conf(16, 3, 16, 16, True, "RE", 2, 1),  # C1
@@ -293,6 +308,20 @@ def mobilenet_v3_large(pretrained: bool = False, progress: bool = True, **kwargs
 
 
 @register_model
+def efficient_mobilenet_v3_small(pretrained: bool = False, progress: bool = True, **kwargs: Any) -> MobileNetV3:
+    """
+    Constructs a small MobileNetV3 architecture from
+    `"Searching for MobileNetV3" <https://arxiv.org/abs/1905.02244>`_.
+
+    Args:
+        pretrained (bool): If True, returns a model pre-trained on ImageNet
+        progress (bool): If True, displays a progress bar of the download to stderr
+    """
+    arch = "efficient_mobilenet_v3_small"
+    inverted_residual_setting, last_channel = _mobilenet_v3_conf(arch, **kwargs)
+    return _mobilenet_v3_model(arch, inverted_residual_setting, last_channel, pretrained, progress, **kwargs)
+
+@register_model
 def mobilenet_v3_small(pretrained: bool = False, progress: bool = True, **kwargs: Any) -> MobileNetV3:
     """
     Constructs a small MobileNetV3 architecture from
@@ -339,7 +368,7 @@ def better_mobilenet_v3_small(pretrained: bool = False, progress: bool = True, *
 if __name__ == '__main__':
     from rfa_toolbox import create_graph_from_pytorch_model, visualize_architecture, input_resolution_range
 
-    model = better_mobilenet_v3_small() # replace with any torch module-object-returning function
+    model = efficient_mobilenet_v3_small() # replace with any torch module-object-returning function
     graph = create_graph_from_pytorch_model(model, input_res=(1, 3, 224, 224))
     flops = FlopCountAnalysis(model, torch.ones(1, 3, 224, 224)).total()
     imin, _ = input_resolution_range(graph)
