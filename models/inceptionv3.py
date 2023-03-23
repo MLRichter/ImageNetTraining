@@ -485,5 +485,5 @@ if __name__ == '__main__':
         model = arc(aux_logits=False)
         graph = create_graph_from_pytorch_model(model)
         print("Input resolution range:", input_resolution_range(graph))
-        print("Total flops;", FlopCountAnalysis(model, torch.ones(1, 3, 224, 224)).total())
+        print("Total flops;", FlopCountAnalysis(model, torch.ones(1, 3, 299, 299)).total())
         #visualize_architecture(graph, model_name=model_name, input_res=224 // 16).view()

@@ -31,7 +31,7 @@ _TORCH_BASIC_DS = dict(
 )
 _TRAIN_SYNONYM = {'train', 'training'}
 _EVAL_SYNONYM = {'val', 'valid', 'validation', 'eval', 'evaluation'}
-
+imnet21k_cache ={}
 
 def _search_split(root, split):
     # look for sub-folder with name of split in root and use that if it exists

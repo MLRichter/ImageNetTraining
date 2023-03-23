@@ -34,6 +34,7 @@ import models.convnext_isotropic
 import models.resnet
 import models.efficientnet
 import models.densenet
+import models.deepnas_resnet.demo
 
 def str2bool(v):
     """
