@@ -1,1 +1,0 @@
-from demo import better_resnet18like

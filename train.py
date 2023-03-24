@@ -30,6 +30,8 @@ import models.nasnetmobile
 import models.volo
 import models.shape_adaptor
 import models.inceptionv3
+import models.deepnas_resnet.demo
+
 
 import torch
 import torch.nn as nn
