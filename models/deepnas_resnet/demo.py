@@ -6,7 +6,7 @@ import argparse
 import torch
 from timm.models import register_model
 
-from cnnnet import CnnNet
+from models.deepnas_resnet.cnnnet import CnnNet
 
 
 def parse_args():

@@ -13,8 +13,8 @@ import torch
 from torch import nn
 from torch.nn import functional as F
 
-from modules import __all_blocks__, network_weight_stupid_init
-from modules.qconv import QLinear
+from .modules import __all_blocks__, network_weight_stupid_init
+from .modules.qconv import QLinear
 
 
 
