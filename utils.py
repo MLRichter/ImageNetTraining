@@ -18,7 +18,10 @@ from pathlib import Path
 
 import torch
 import torch.distributed as dist
-from torch._six import inf
+try:
+    from torch._six import inf
+except ImportError:
+    from torch import inf
 
 from tensorboardX import SummaryWriter
 
