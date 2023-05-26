@@ -146,15 +146,15 @@ class EfficientMobileNetV1(nn.Module):
             conv_dw(512, 512, 1),
             conv_dw(512, 512, 1),
             conv_dw(512, 512, 1),
-            #conv_dw(512, 1024, 2),
+            conv_dw(512, 1024, 2),
             #conv_dw(1024, 1024, 1),
             nn.AdaptiveAvgPool2d(1)
         )
-        self.fc = nn.Linear(512, n_classes)
+        self.fc = nn.Linear(1024, n_classes)
 
     def forward(self, x):
         x = self.model(x)
-        x = x.view(-1, 512)
+        x = x.view(-1, 1024)
         x = self.fc(x)
         return x
 
